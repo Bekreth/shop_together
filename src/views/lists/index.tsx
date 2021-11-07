@@ -7,8 +7,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import ShoppingLists from './components/ShoppingLists';
 
 export default () => {
   const [isOpen, setOpen] = React.useState(false)
@@ -41,10 +40,7 @@ export default () => {
           open={isOpen}
           onClose={() => setOpen(false)}
         >
-          <List>
-            <ListItem>hello</ListItem>
-            <ListItem>world</ListItem>
-          </List>
+          <ShoppingLists/>
         </Drawer>
       }
     </Box>

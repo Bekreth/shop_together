@@ -1,4 +1,6 @@
 import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 
 interface ListData {
   _id: string
@@ -26,15 +28,16 @@ const sampleData: ListData[] = [
 
 export default () => {
   return (
-    <Box>
-    </Box>
+    <List>
+      {sampleData.map(ShoppingList)}
+    </List>
   )
 }
 
 const ShoppingList = (list: ListData) => {
   return (
-    <Box>
-    
-    </Box>
+    <ListItem>
+      l0 : {list.name}
+    </ListItem>
   )
 }
