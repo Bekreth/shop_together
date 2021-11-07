@@ -7,13 +7,22 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+
 import ShoppingLists from './components/ShoppingLists';
+import ListData from './components/ListData'
+import {sampleData} from './data'
 
 export default () => {
   const [isOpen, setOpen] = React.useState(false)
+  const [shoppingLists, setLists] = React.useState(sampleData)
   const handleListsClicked = () => {
     setOpen(!isOpen)
   }
+
+  const appendList = (newList: ListData) => {
+    setLists(shoppingLists.concat(newList))
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -40,7 +49,10 @@ export default () => {
           open={isOpen}
           onClose={() => setOpen(false)}
         >
-          <ShoppingLists/>
+          <ShoppingLists 
+            listsData={shoppingLists}
+            createList={appendList}
+          />
         </Drawer>
       }
     </Box>
