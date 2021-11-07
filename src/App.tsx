@@ -13,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<BasicCard />} />
         <Route path="/lists" element={<Lists />} />
+        <Route path="/lists/:listName" element={<Lists />} />
       </Routes>
     </Router>
   );

@@ -1,39 +1,55 @@
 import React from 'react';
+import { NavigateFunction, useNavigate } from 'react-router';
+
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
 import InboxIcon from '@mui/icons-material/Inbox';
 import AddIcon from '@mui/icons-material/Add';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Divider from '@mui/material/Divider';
 
-import ListData from './ListData';
+import { ListMetadata, ListData } from './ListData';
 import CreateList from './CreateList';
 
 export interface ShoppingListsProps {
-  listsData: ListData[]
+  listsData: ListMetadata[]
   createList: (newList: ListData) => void
+  closeDrawer: () => void
 }
 
 export default (props: ShoppingListsProps) => {
-  const {listsData, createList} = props
+  const {listsData, createList, closeDrawer} = props
+  const navigate = useNavigate()
 
   return (
     <List>
-      {listsData.map(ShoppingList)}
+      {listsData.map((data) => ( 
+        ShoppingList(data, navigate, closeDrawer)
+       ))}
       <Divider/>
       <ListActions createList={createList}/>
     </List>
   )
 }
 
-const ShoppingList = (list: ListData) => {
+const ShoppingList = (
+  list: ListMetadata, 
+  navigate: NavigateFunction,
+  closeDrawer: () => void
+) => {
   return (
-    <ListItem button key={list.name}>
+    <ListItem 
+      button 
+      key={list.name}
+      onClick={() => {
+        const base = encodeURIComponent(list.name)
+        navigate(`/lists/${base}`)
+        closeDrawer()
+      }}
+    >
       <ListItemIcon>
         <InboxIcon/>
       </ListItemIcon>
