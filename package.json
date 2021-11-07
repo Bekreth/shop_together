@@ -1,0 +1,8 @@
+{
+  "name": "shop_together",
+  "version": "1.0.0",
+  "description": "A simple Web App for sharing a common shopping list in a BYOI setup",
+  "main": "index.tx",
+  "author": "Christopher Hughes <bekreth@gmail.com>",
+  "license": "MIT"
+}
