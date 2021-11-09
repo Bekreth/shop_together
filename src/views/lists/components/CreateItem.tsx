@@ -1,11 +1,11 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
-import {ListData, makeList} from './ListData';
+import { Item, ListData, makeItem, PurchaseState } from './ListData'
+import { Button } from '@mui/material';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -19,16 +19,17 @@ const style = {
   p: 4,
 };
 
-
-export interface CreateListProps {
-    isOpen: boolean
-    close: () => void
-    addList: (newList: ListData) => void
+export interface CreateItemProps {
+  listName: string
+  addItem: (item: Item) => void
+  isOpen: boolean
+  close: () => void
 }
 
-export default (props: CreateListProps) => {
-  const {isOpen, close, addList} = props
-  const [listName, setListName] = React.useState("")
+export default (props: CreateItemProps) => {
+  const {listName, addItem, isOpen, close} = props
+  const [itemName, setItemName] = React.useState("")
+
 
   return (
     <Modal
@@ -36,27 +37,32 @@ export default (props: CreateListProps) => {
       onClose={close}
     >
       <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h4">
-          New List
+        <Typography id="modal-modal-title" variant="h5">
+          New Item
+        </Typography>
+        <Typography id="modal-modal-title" variant="h6">
+          Adding to : {listName}
         </Typography>
         <TextField
-          id="listName" 
-          label="List Name"
+          id="itemName" 
+          label="Item Name"
           variant="outlined"
           onChange={event => {
-            setListName(event.target.value)
+            setItemName(event.target.value)
           }}
         />
         <br/>
         <Button
           variant="contained"
           onClick={() => {
-            const newList: ListData = makeList(listName)
-            addList(newList)
+            if (itemName !== "") {
+              const newItem = makeItem(itemName)
+              addItem(newItem)
+            }
             close()
           }}
         >
-          Create
+          Add To List
         </Button>
         <Button
           variant="outlined"

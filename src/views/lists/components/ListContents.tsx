@@ -11,19 +11,65 @@ import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import Switch from '@mui/material/Switch';
 
-import { ListData, PurchaseState } from './ListData'
+import { Item, ListData, PurchaseState } from './ListData'
+import CreateItem from './CreateItem';
 
 export interface ListContentsProps {
   focusedList: ListData
-  setFocusedList: (listData: ListData) => void
 }
 
 export default (props: ListContentsProps) => {
-  const {focusedList, setFocusedList} = props
+  const {focusedList} = props
 
+  const [itemList, setItemList] = React.useState(focusedList.items)
   const [showPurchased, setShowPurchased] = React.useState(false)
-  const [showStores, setShowStores] = React.useState(false)
   const [editingItems, setEditingItems] = React.useState(false)
+  const [creatingItem, setCreatingItem] = React.useState(false)
+
+  const toggleCart = (items: Item[], itemName: string) => {
+    const output = items
+      .map(item => { 
+        if (item.name !== itemName) {
+          return item
+        }
+        if (item.state === PurchaseState.TO_BUY) {
+          item.state = PurchaseState.IN_CART
+        } else if (item.state === PurchaseState.IN_CART) {
+          item.state = PurchaseState.TO_BUY
+        }
+        return item
+      })
+    setItemList(output)
+  }
+
+  const purchaseItems = (items: Item[]) => {
+    const output = items
+      .map(item => {
+        if (item.state === PurchaseState.IN_CART) {
+          item.state = PurchaseState.PURCHASED
+        }
+        return item
+      })
+    setItemList(output)
+  }
+
+  const returnToBuy = (items: Item[], itemName: string) => {
+    const output = items
+      .map(item => {
+        if (item.name !== itemName) {
+          return item
+        }
+        item.state = PurchaseState.TO_BUY
+        return item
+      })
+    setItemList(output)
+  }
+
+  const createItemAppender = (items: Item[]) => {
+    return (item: Item) => {
+      items.push(item)
+    }
+  }
 
   return (
     <Box>
@@ -35,52 +81,63 @@ export default (props: ListContentsProps) => {
           Show Purchased Items
         </Button>
         <Button
-          variant={showStores ? "contained" : "outlined"}
-          onClick={() => setShowStores(!showStores)}
-        >
-          Show Prefered Store
-        </Button>
-        <Button
           variant={editingItems ? "contained" : "outlined"}
           onClick={() => setEditingItems(!editingItems)}
         >
           Edit Items
         </Button>
       </ButtonGroup>
-      <Button>
+      <Button
+        onClick={() => setCreatingItem(true)}
+      >
         Add Item
       </Button>
-      <Button>
+      <Button
+        onClick={() => purchaseItems(itemList)}
+      >
         Checkout
       </Button>
+      <CreateItem
+        listName={focusedList.name}
+        addItem={createItemAppender(itemList)}
+        isOpen={creatingItem}
+        close={() => setCreatingItem(false)}
+      />
       <List
         sx={{width: '80%', float: "right"}}
         subheader={<ListSubheader>Item List</ListSubheader>}
       >
-        {unpurchasedItems(focusedList)}
+        {unpurchasedItems(itemList, toggleCart)}
         <Divider/>
-        {showPurchased && purchasedItems(focusedList)}
+        {showPurchased && 
+          purchasedItems(itemList, returnToBuy)}
       </List>
     </Box>
   )
 }
 
-const unpurchasedItems = (focusedList: ListData) => {
+const unpurchasedItems = (
+  itemList: Item[], 
+  toggleItem: (items: Item[], itemName: string) => void,
+) => {
   return ( 
     <Box>
-      {focusedList.items
+      {itemList
         .filter((item) => (
-          item.state != PurchaseState.PURCHASED
+          item.state !== PurchaseState.PURCHASED
         ))
         .sort((item1, item2) => (
-          item1.state - item2.state
+          item1.name.localeCompare(item2.name)
         ))
         .map(item => (
           <ListItem>
             <ListItemText>
               {item.name}
             </ListItemText>
-            <Switch checked={item.state == PurchaseState.IN_CART}/>
+            <Switch 
+              onChange={() => toggleItem(itemList, item.name)}
+              checked={item.state === PurchaseState.IN_CART}
+            />
           </ListItem>
         ))
       }
@@ -88,20 +145,25 @@ const unpurchasedItems = (focusedList: ListData) => {
   )
 }
 
-const purchasedItems = (focusedList: ListData) => {
+const purchasedItems = (
+  itemList: Item[],
+  returnToBuy: (items: Item[], itemName: string) => void,
+) => {
   return (
     <Box>
       <ListSubheader>Already Purchased</ListSubheader>
-      {focusedList.items
+      {itemList
         .filter((item) => (
-          item.state == PurchaseState.PURCHASED
+          item.state === PurchaseState.PURCHASED
         ))
         .map(item => (
           <ListItem>
             <ListItemText>
               {item.name}
             </ListItemText>
-            <Button>
+            <Button
+              onClick={() => returnToBuy(itemList, item.name)}
+            >
               Readd to List
             </Button>
           </ListItem>         

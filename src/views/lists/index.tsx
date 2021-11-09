@@ -1,11 +1,10 @@
 import React from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
@@ -27,9 +26,9 @@ export default () => {
   const [focusedList, setFocusedList] = React.useState(emptyList)
   const {listName} = useParams()
 
-  if (listName != undefined) {
-    const filteredList = shoppingLists.filter(list => list.name == listName)
-    if (filteredList.length == 1 && filteredList[0] != focusedList) {
+  if (listName !== undefined) {
+    const filteredList = shoppingLists.filter(list => list.name === listName)
+    if (filteredList.length === 1 && filteredList[0] !== focusedList) {
       setFocusedList(filteredList[0])
     }
   }
@@ -63,7 +62,7 @@ export default () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Shop Together
           </Typography>
-          {listName != "" &&
+          {listName !== "" &&
             <Typography variant="h6" component="div" sx={{ flexGrow: 1}}>
               {listName}
             </Typography>
@@ -83,10 +82,9 @@ export default () => {
           />
         </Drawer>
       }
-      {focusedList != emptyList && 
+      {focusedList !== emptyList && 
         <ListContents
           focusedList={focusedList}
-          setFocusedList={setFocusedList}
         />
       }
     </Box>

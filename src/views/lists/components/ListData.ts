@@ -31,3 +31,11 @@ export const makeList: (name: string) => ListData = (name: string) => {
       items: []
   }
 }
+
+export const makeItem: (name: string) => Item = (name: string) => {
+  return {
+    name: name,
+    state: PurchaseState.TO_BUY,
+    updated: new Date()
+  }
+}
