@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import BasicCard from "./views/login/BasicCard"
-import Lists from "./views/lists"
+import BasicCard from "views/login/BasicCard"
+import Lists from "views/lists"
 import './App.css';
 
 

@@ -11,8 +11,8 @@ import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import Switch from '@mui/material/Switch';
 
-import { Item, ListData, PurchaseState } from './ListData'
-import CreateItem from './CreateItem';
+import { Item, ListData, PurchaseState } from 'listData'
+import CreateItem from 'views/lists/components/CreateItem';
 
 export interface ListContentsProps {
   focusedList: ListData
@@ -25,8 +25,6 @@ export default (props: ListContentsProps) => {
   const [showPurchased, setShowPurchased] = React.useState(false)
   const [editingItems, setEditingItems] = React.useState(false)
   const [creatingItem, setCreatingItem] = React.useState(false)
-
-  console.log(new Date().getTime())
 
   const toggleCart = (items: Item[], itemName: string) => {
     const output = items

@@ -4,7 +4,7 @@ import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
-import { Item, ListData, makeItem, PurchaseState } from './ListData'
+import { Item, makeItem } from 'listData'
 import { Button } from '@mui/material';
 
 const style = {

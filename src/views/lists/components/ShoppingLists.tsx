@@ -11,8 +11,8 @@ import AddIcon from '@mui/icons-material/Add';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Divider from '@mui/material/Divider';
 
-import { ListMetadata, ListData } from './ListData';
-import CreateList from './CreateList';
+import { ListMetadata, ListData } from 'listData';
+import CreateList from 'views/lists/components/CreateList';
 
 export interface ShoppingListsProps {
   listsData: ListMetadata[]

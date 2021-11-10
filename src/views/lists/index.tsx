@@ -8,15 +8,16 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
-import ListContents from './components/ListContents'
-import ShoppingLists from './components/ShoppingLists';
-import { ListData } from './components/ListData'
-import { sampleData } from './data'
+import ListContents from 'views/lists/components/ListContents'
+import ShoppingLists from 'views/lists/components/ShoppingLists';
+import { ListData, ListType } from 'listData'
+import { sampleData } from 'views/lists/data'
 
 const emptyList: ListData = {
   _id: "",
   _rev: "",
   name: "",
+  type: ListType.SHOPPING,
   items: []
 }
 

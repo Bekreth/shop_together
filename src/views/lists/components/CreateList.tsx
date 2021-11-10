@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 
-import {ListData, makeList} from './ListData';
+import {ListData, makeList} from 'listData';
 
 const style = {
   position: 'absolute' as 'absolute',
