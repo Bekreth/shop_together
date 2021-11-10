@@ -43,7 +43,7 @@ echo "Creating shopping list views";
 curl $ADDRESS/$SHOPPING_LIST/_design/$SHOPPING_LIST \
     -X PUT \
     -H "Content-Type: application/json" \
-    -T ops/$SHOPPING_LIST.json;
+    -T src/listStorage/$SHOPPING_LIST.json;
 
 echo
 echo "Assigning users to databases";

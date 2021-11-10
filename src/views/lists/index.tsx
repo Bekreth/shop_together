@@ -15,7 +15,7 @@ import { sampleData } from 'views/lists/data'
 
 const emptyList: ListData = {
   _id: "",
-  _rev: "",
+  // _rev: "",
   name: "",
   type: ListType.SHOPPING,
   items: []

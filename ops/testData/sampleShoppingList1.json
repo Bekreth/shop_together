@@ -1,0 +1,27 @@
+{
+  "name": "Regular Shopping",
+  "type": "SHOPPING",
+  "items": [
+    {
+      "name": "Apples",
+      "description": "something",
+      "state": "TO_BUY",
+      "updated": "",
+      "created": ""
+    },
+    {
+      "name": "Bananas",
+      "description": "something",
+      "state": "IN_CART",
+      "updated": "",
+      "created": ""
+    },
+    {
+      "name": "Sugar",
+      "description": "something",
+      "state": "PURCHASED",
+      "updated": "",
+      "created": ""
+    }
+  ]
+}

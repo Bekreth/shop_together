@@ -1,0 +1,8 @@
+{
+  "views": {
+    "listsByName": {
+      "map": "function (doc) {\n  emit(doc.name, doc);\n}"
+    }
+  },
+  "language": "javascript"
+}  
