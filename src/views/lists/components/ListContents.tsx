@@ -26,6 +26,8 @@ export default (props: ListContentsProps) => {
   const [editingItems, setEditingItems] = React.useState(false)
   const [creatingItem, setCreatingItem] = React.useState(false)
 
+  console.log(new Date().getTime())
+
   const toggleCart = (items: Item[], itemName: string) => {
     const output = items
       .map(item => { 
@@ -87,6 +89,8 @@ export default (props: ListContentsProps) => {
           Edit Items
         </Button>
       </ButtonGroup>
+      <br/>
+      <br/>
       <Button
         onClick={() => setCreatingItem(true)}
       >

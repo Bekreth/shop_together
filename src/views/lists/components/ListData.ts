@@ -18,9 +18,9 @@ export interface Item {
 }
 
 export enum PurchaseState {
-  TO_BUY,
-  IN_CART,
-  PURCHASED
+  TO_BUY = "TO_BUY",
+  IN_CART = "IN_CART",
+  PURCHASED = "PURCHASED"
 }
 
 export const makeList: (name: string) => ListData = (name: string) => {
