@@ -1,10 +1,10 @@
-import { ListData } from "listData";
+import { ListData, ListMetadata } from "listData";
 import PouchDB from "pouchdb";
 
 const scheme = "http"
 const host = "localhost"
 const port = "5984"
-const databaseName = "shopping_lists"
+const databaseName = "group_lists"
 const username = "shop_together"
 const password = "password"
 
@@ -32,6 +32,13 @@ export default class ListStorage {
     }
 
     PouchDB.sync(remoteDB, this.db, options)
+  }
+
+  getListNames(): Promise<ListMetadata[]> {
+    return this.db.query("list_views.json/listNames", {reduce: true})
+      .then(message => {
+        return message.rows.map(row => row.value)
+      })
   }
 
   saveList(list: ListData) {

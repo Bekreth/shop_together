@@ -12,7 +12,9 @@ import ListContents from 'views/lists/components/ListContents'
 import ShoppingLists from 'views/lists/components/ShoppingLists';
 import { ListData, ListType } from 'listData'
 import { sampleData } from 'views/lists/data'
+import ListStorage from 'listStorage';
 
+const emptyNamesList: string[] = []
 const emptyList: ListData = {
   _id: "",
   // _rev: "",
@@ -21,11 +23,26 @@ const emptyList: ListData = {
   items: []
 }
 
-export default () => {
-  const [isOpen, setOpen] = React.useState(false)
-  const [shoppingLists, setLists] = React.useState(sampleData)
-  const [focusedList, setFocusedList] = React.useState(emptyList)
+export interface ListsProps {
+  listData: ListData[]
+}
+
+export default (props: ListsProps) => {
   const {listName} = useParams()
+
+  const [isOpen, setOpen] = React.useState(false)
+  const [shoppingLists, setLists] = React.useState(props.listData)
+  // const [listNames, setListNames] = React.useState(emptyNamesList)
+  const [focusedList, setFocusedList] = React.useState(emptyList)
+
+  // const db = new ListStorage()
+  // db.getListNames()
+    // .then(names => {
+      // setListNames(names)
+    // })
+    // .catch(err => {
+      // console.log("Unable to get list names", err)
+    // })
 
   if (listName !== undefined) {
     const filteredList = shoppingLists.filter(list => list.name === listName)
@@ -43,7 +60,7 @@ export default () => {
   }
 
   const appendList = (newList: ListData) => {
-    setLists(shoppingLists.concat(newList))
+    // setLists(shoppingLists.concat(newList))
   }
 
   return (
