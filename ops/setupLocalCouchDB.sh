@@ -3,7 +3,7 @@ PORT=5984
 ADDRESS=http://admin:password@localhost:$PORT
 ORG=org.couchdb.user
 USER=shop_together
-SHOPPING_LIST=shopping_lists
+LIST=group_lists
 
 echo
 echo "Configuring single node cluster"
@@ -36,18 +36,18 @@ curl $ADDRESS/_users/$ORG:$USER \
 
 echo
 echo "Creating shopping list database";
-curl $ADDRESS/$SHOPPING_LIST -X PUT;
+curl $ADDRESS/$LIST -X PUT;
 
 echo
 echo "Creating shopping list views";
-curl $ADDRESS/$SHOPPING_LIST/_design/$SHOPPING_LIST \
+curl $ADDRESS/$LIST/_design/list_views.json \
     -X PUT \
     -H "Content-Type: application/json" \
-    -T src/listStorage/$SHOPPING_LIST.json;
+    -T ops/group_lists/_design/list_views.json;
 
 echo
 echo "Assigning users to databases";
-curl $ADDRESS/$SHOPPING_LIST/_security \
+curl $ADDRESS/$LIST/_security \
     -X PUT \
     -H "Content-Type: application/json" \
     -d '

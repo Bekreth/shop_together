@@ -27,7 +27,7 @@ stop_couchdb:
 	fi
 
 .seed_couchdb:
-	./ops/seedTestData.sh
+	@./ops/seedTestData.sh ops
 
 .remove_couchdb: stop_couchdb
 	@if [ "$(shell docker inspect -f '{{.State.Running}}' ${DATABASE_NAME} 2>/dev/null)" = "false" ]; then \
