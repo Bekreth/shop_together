@@ -53,4 +53,10 @@ export default class ListStorage {
     return putObject.rev
   }
 
+  async updateList(data: ListData): Promise<ListData> {
+    const putObject = await this.db.put(data)
+    data._rev = putObject.rev
+    return data
+  }
+
 }

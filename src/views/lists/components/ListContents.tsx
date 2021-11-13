@@ -1,4 +1,4 @@
-import React from 'react';
+import {useContext, useEffect, useState} from 'react';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -11,6 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import Switch from '@mui/material/Switch';
 
+import { DatabaseContext } from 'index';
 import { Item, ListData, PurchaseState } from 'listData'
 import CreateItem from 'views/lists/components/CreateItem';
 
@@ -20,14 +21,15 @@ export interface ListContentsProps {
 
 export default (props: ListContentsProps) => {
   const {focusedList} = props
+  const dbClient = useContext(DatabaseContext)
 
-  const [itemList, setItemList] = React.useState(focusedList.items)
-  const [showPurchased, setShowPurchased] = React.useState(false)
-  const [editingItems, setEditingItems] = React.useState(false)
-  const [creatingItem, setCreatingItem] = React.useState(false)
+  const [listContents, setListContents] = useState(focusedList)
+  const [showPurchased, setShowPurchased] = useState(false)
+  const [editingItems, setEditingItems] = useState(false)
+  const [creatingItem, setCreatingItem] = useState(false)
 
-  const toggleCart = (items: Item[], itemName: string) => {
-    const output = items
+  const toggleCart = (list: ListData, itemName: string) => {
+    list.items
       .map(item => { 
         if (item.name !== itemName) {
           return item
@@ -39,22 +41,26 @@ export default (props: ListContentsProps) => {
         }
         return item
       })
-    setItemList(output)
+    dbClient.updateList(list)
+      .then(setListContents)
+      .catch(console.error)
   }
 
-  const purchaseItems = (items: Item[]) => {
-    const output = items
+  const purchaseItems = (list: ListData) => {
+    list.items
       .map(item => {
         if (item.state === PurchaseState.IN_CART) {
           item.state = PurchaseState.PURCHASED
         }
         return item
       })
-    setItemList(output)
+    dbClient.updateList(list)
+      .then(setListContents)
+      .catch(console.error)
   }
 
-  const returnToBuy = (items: Item[], itemName: string) => {
-    const output = items
+  const returnToBuy = (list: ListData, itemName: string) => {
+    list.items
       .map(item => {
         if (item.name !== itemName) {
           return item
@@ -62,12 +68,17 @@ export default (props: ListContentsProps) => {
         item.state = PurchaseState.TO_BUY
         return item
       })
-    setItemList(output)
+    dbClient.updateList(list)
+      .then(setListContents)
+      .catch(console.error)
   }
 
-  const createItemAppender = (items: Item[]) => {
+  const createItemAppender = (list: ListData) => {
     return (item: Item) => {
-      items.push(item)
+      list.items.push(item)
+      dbClient.updateList(list)
+        .then(setListContents)
+        .catch(console.error)
     }
   }
 
@@ -95,13 +106,13 @@ export default (props: ListContentsProps) => {
         Add Item
       </Button>
       <Button
-        onClick={() => purchaseItems(itemList)}
+        onClick={() => purchaseItems(listContents)}
       >
         Checkout
       </Button>
       <CreateItem
         listName={focusedList.name}
-        addItem={createItemAppender(itemList)}
+        addItem={createItemAppender(listContents)}
         isOpen={creatingItem}
         close={() => setCreatingItem(false)}
       />
@@ -109,22 +120,22 @@ export default (props: ListContentsProps) => {
         sx={{width: '80%', float: "right"}}
         subheader={<ListSubheader>Item List</ListSubheader>}
       >
-        {unpurchasedItems(itemList, toggleCart)}
+        {unpurchasedItems(listContents, toggleCart)}
         <Divider/>
         {showPurchased && 
-          purchasedItems(itemList, returnToBuy)}
+          purchasedItems(listContents, returnToBuy)}
       </List>
     </Box>
   )
 }
 
 const unpurchasedItems = (
-  itemList: Item[], 
-  toggleItem: (items: Item[], itemName: string) => void,
+  list: ListData,
+  toggleItem: (list: ListData, itemName: string) => void,
 ) => {
   return ( 
     <Box>
-      {itemList
+      {list.items
         .filter((item) => (
           item.state !== PurchaseState.PURCHASED
         ))
@@ -137,7 +148,7 @@ const unpurchasedItems = (
               {item.name}
             </ListItemText>
             <Switch 
-              onChange={() => toggleItem(itemList, item.name)}
+              onChange={() => toggleItem(list, item.name)}
               checked={item.state === PurchaseState.IN_CART}
             />
           </ListItem>
@@ -148,13 +159,13 @@ const unpurchasedItems = (
 }
 
 const purchasedItems = (
-  itemList: Item[],
-  returnToBuy: (items: Item[], itemName: string) => void,
+  list: ListData,
+  returnToBuy: (list: ListData, itemName: string) => void,
 ) => {
   return (
     <Box>
       <ListSubheader>Already Purchased</ListSubheader>
-      {itemList
+      {list.items
         .filter((item) => (
           item.state === PurchaseState.PURCHASED
         ))
@@ -164,7 +175,7 @@ const purchasedItems = (
               {item.name}
             </ListItemText>
             <Button
-              onClick={() => returnToBuy(itemList, item.name)}
+              onClick={() => returnToBuy(list, item.name)}
             >
               Readd to List
             </Button>

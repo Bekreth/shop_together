@@ -9,7 +9,7 @@ export enum ListType {
 
 export interface ListMetadata {
   _id: string
-//   _rev: string
+  _rev?: string
   name: string
   type: ListType
 }

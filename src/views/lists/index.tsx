@@ -16,7 +16,6 @@ import { DatabaseContext } from 'index';
 const emptyNamesList: string[] = []
 const emptyList: ListData = {
   _id: "",
-  // _rev: "",
   name: "",
   type: ListType.SHOPPING,
   items: []
@@ -47,8 +46,8 @@ export default (props: ListsProps) => {
         setAvailableLists(lists)
       })
       .catch(error => {
-        console.error("failed to get list of list names", error)
         setNameLookupError(true)
+        console.error("failed to get list of list names", error)
       })
   }, [isOpen])
 
