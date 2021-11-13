@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router';
 
 import Box from '@mui/material/Box';
@@ -11,41 +11,42 @@ import AddIcon from '@mui/icons-material/Add';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Divider from '@mui/material/Divider';
 
-import { ListMetadata, ListData } from 'listData';
 import CreateList from 'views/lists/components/CreateList';
+import { ListData } from 'listData';
 
 export interface ShoppingListsProps {
-  listsData: ListMetadata[]
-  createList: (newList: ListData) => void
+  listNames: string[]
   closeDrawer: () => void
+  appendList: (listData: ListData) => Promise<string>
 }
 
 export default (props: ShoppingListsProps) => {
-  const {listsData, createList, closeDrawer} = props
+  const {listNames, closeDrawer, appendList} = props
   const navigate = useNavigate()
+
 
   return (
     <List>
-      {listsData.map((data) => ( 
-        ShoppingList(data, navigate, closeDrawer)
-       ))}
+      {listNames.map(listName => (
+        ShoppingList(listName, navigate, closeDrawer)
+      ))}
       <Divider/>
-      <ListActions createList={createList}/>
+      {ListActions(appendList)}
     </List>
   )
 }
 
 const ShoppingList = (
-  list: ListMetadata, 
+  listName: string, 
   navigate: NavigateFunction,
   closeDrawer: () => void
 ) => {
   return (
     <ListItem 
       button 
-      key={list.name}
+      key={listName}
       onClick={() => {
-        const base = encodeURIComponent(list.name)
+        const base = encodeURIComponent(listName)
         navigate(`/lists/${base}`)
         closeDrawer()
       }}
@@ -53,16 +54,15 @@ const ShoppingList = (
       <ListItemIcon>
         <InboxIcon/>
       </ListItemIcon>
-      <ListItemText primary={list.name}/>
+      <ListItemText primary={listName}/>
     </ListItem>
   )
 }
 
-const ListActions = (props: {createList: (newList: ListData) => void}) => {
+const ListActions = (appendList: (listData: ListData) => Promise<string>) => {
   const createList = "Create List"
   const editList = "Edit List"
-  const {createList: addToList} = props
-  const [isCreatingList, setCreatingList] = React.useState(false)
+  const [isCreatingList, setCreatingList] = useState(false)
 
   return (
     <Box>
@@ -85,7 +85,7 @@ const ListActions = (props: {createList: (newList: ListData) => void}) => {
       <CreateList 
         isOpen={isCreatingList} 
         close={() => setCreatingList(false)}
-        addList={addToList}
+        appendList={appendList}
       />
     </Box>
   )

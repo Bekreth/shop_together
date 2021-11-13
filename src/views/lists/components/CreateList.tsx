@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -19,16 +19,16 @@ const style = {
   p: 4,
 };
 
-
 export interface CreateListProps {
-    isOpen: boolean
-    close: () => void
-    addList: (newList: ListData) => void
+  isOpen: boolean
+  close: () => void
+  appendList: (listData: ListData) => Promise<string>
 }
 
 export default (props: CreateListProps) => {
-  const {isOpen, close, addList} = props
-  const [listName, setListName] = React.useState("")
+  const {isOpen, close, appendList} = props
+  const [listName, setListName] = useState("")
+  const [insertionError, setInsertionError] = useState(false)
 
   return (
     <Modal
@@ -51,9 +51,11 @@ export default (props: CreateListProps) => {
         <Button
           variant="contained"
           onClick={() => {
-            const newList: ListData = makeList(listName)
-            addList(newList)
-            close()
+            appendList(makeList(listName))
+              .then(rev => close())
+              .catch(error => (
+                console.error("failed to insert", error)
+              ))
           }}
         >
           Create

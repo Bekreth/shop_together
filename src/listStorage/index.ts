@@ -1,6 +1,7 @@
 import { ListData, ListMetadata } from "listData";
 import PouchDB from "pouchdb";
 
+// TODO: have these values be configurable from the constructor
 const scheme = "http"
 const host = "localhost"
 const port = "5984"
@@ -14,6 +15,7 @@ export default class ListStorage {
   private db: PouchDB.Database;
 
   constructor() {
+    console.log("Started the db connect")
     this.db = new PouchDB(databaseName)
     const remote = `${scheme}://${host}:${port}/${databaseName}`;
     const remoteDB = new PouchDB(remote, {
@@ -34,37 +36,21 @@ export default class ListStorage {
     PouchDB.sync(remoteDB, this.db, options)
   }
 
-  getListNames(): Promise<ListMetadata[]> {
-    return this.db.query("list_views.json/listNames", {reduce: true})
-      .then(message => {
-        return message.rows.map(row => row.value)
-      })
+  async getListNames(): Promise<string[]> {
+    const message = await this.db.query("list_views.json/listNames", {reduce: true})
+    const output: string[] = message.rows.map(row => row.value)[0]
+    return output
   }
 
-  saveList(list: ListData) {
-    this.db.put(list)
-      .then(msg => {
-        console.log("Success writing")
-        console.log(msg)
-        console.log("------")
-      }).catch(err => {
-        console.log("Failed to write")
-        console.log(err)
-        console.log("------")
-      })
+  async getListByName(name: string): Promise<ListData> {
+    const message = await this.db.query("list_views.json/listByName", {key: name})
+    const output: ListData = message.rows[0].value
+    return output
   }
 
-  getList() {
-    this.db.get("Some value")
-      .then(msg => {
-        console.log("Success reading")
-        console.log(msg)
-        console.log("-------")
-      })
-      .catch(err => {
-        console.log("Failed to read")
-        console.log(err)
-        console.log("-------")
-      })
+  async createList(data: ListData): Promise<string> {
+    const putObject = await this.db.put(data)
+    return putObject.rev
   }
+
 }

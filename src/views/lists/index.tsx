@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState, useEffect, useContext} from 'react';
 import {useParams} from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -11,8 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ListContents from 'views/lists/components/ListContents'
 import ShoppingLists from 'views/lists/components/ShoppingLists';
 import { ListData, ListType } from 'listData'
-import { sampleData } from 'views/lists/data'
-import ListStorage from 'listStorage';
+import { DatabaseContext } from 'index';
 
 const emptyNamesList: string[] = []
 const emptyList: ListData = {
@@ -23,6 +22,8 @@ const emptyList: ListData = {
   items: []
 }
 
+const emptyListNames: string[] = []
+
 export interface ListsProps {
   listData: ListData[]
 }
@@ -30,25 +31,49 @@ export interface ListsProps {
 export default (props: ListsProps) => {
   const {listName} = useParams()
 
-  const [isOpen, setOpen] = React.useState(false)
-  const [shoppingLists, setLists] = React.useState(props.listData)
+  const dbClient = useContext(DatabaseContext)
+
+  const [isOpen, setOpen] = useState(false)
+  const [availableLists, setAvailableLists] = useState(emptyListNames)
+  const [listNameLookupError, setNameLookupError] = useState(false)
+  const [listLookupError, setLookupError] = useState(false)
   // const [listNames, setListNames] = React.useState(emptyNamesList)
-  const [focusedList, setFocusedList] = React.useState(emptyList)
+  const [focusedList, setFocusedList] = useState(emptyList)
 
-  // const db = new ListStorage()
-  // db.getListNames()
-    // .then(names => {
-      // setListNames(names)
-    // })
-    // .catch(err => {
-      // console.log("Unable to get list names", err)
-    // })
+  useEffect(() => {
+    dbClient.getListNames()
+      .then(lists => {
+        setNameLookupError(false)
+        setAvailableLists(lists)
+      })
+      .catch(error => {
+        console.error("failed to get list of list names", error)
+        setNameLookupError(true)
+      })
+  }, [isOpen])
 
-  if (listName !== undefined) {
-    const filteredList = shoppingLists.filter(list => list.name === listName)
-    if (filteredList.length === 1 && filteredList[0] !== focusedList) {
-      setFocusedList(filteredList[0])
+  useEffect(() => {
+    const filteredListName = availableLists.filter(name => name === listName)
+    if (filteredListName.length === 1 && filteredListName[0] !== "") {
+      dbClient.getListByName(filteredListName[0])
+        .then(data => {
+          setLookupError(false)
+          setFocusedList(data)
+        })
+        .catch(error => {
+          console.error("failed to get lists", error)
+          setLookupError(true)
+        })
     }
+  }, [listName, availableLists])
+
+  const listAppender: (listData: ListData) => Promise<string> = (listData: ListData) => {
+    return dbClient.createList(listData)
+      .then(rev => {
+        availableLists.push(listData.name)
+        setAvailableLists(availableLists)
+        return rev
+      })
   }
 
   const toggleDrawer = () => {
@@ -57,10 +82,6 @@ export default (props: ListsProps) => {
 
   const closeDrawer = () => {
     setOpen(false)
-  }
-
-  const appendList = (newList: ListData) => {
-    // setLists(shoppingLists.concat(newList))
   }
 
   return (
@@ -94,9 +115,9 @@ export default (props: ListsProps) => {
           onClose={closeDrawer}
         >
           <ShoppingLists 
-            listsData={shoppingLists}
-            createList={appendList}
+            listNames={availableLists}
             closeDrawer={closeDrawer}
+            appendList={listAppender}
           />
         </Drawer>
       }

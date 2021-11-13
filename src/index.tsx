@@ -3,10 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { createContext, useContext, useEffect } from "react";
+import ListStorage from "listStorage";
+
+const dbClient = new ListStorage()
+export const DatabaseContext = createContext(dbClient)
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <DatabaseContext.Provider value={dbClient}>
+      <App />
+    </DatabaseContext.Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

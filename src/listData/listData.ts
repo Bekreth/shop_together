@@ -1,3 +1,5 @@
+import {v4 as uuidv4} from 'uuid'
+
 export interface ListData extends ListMetadata, Items {}
 
 export enum ListType {
@@ -39,7 +41,7 @@ export enum TodoState {
 
 export const makeList: (name: string) => ListData = (name: string) => {
   return {
-      _id: "Some value",
+      _id: uuidv4(),
     //   _rev: "Gotta make this better", // TODO: Needs better construction
       name: name,
       type: ListType.SHOPPING, // TODO: this needs a real value
