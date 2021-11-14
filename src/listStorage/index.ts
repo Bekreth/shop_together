@@ -3,7 +3,7 @@ import PouchDB from "pouchdb";
 
 // TODO: have these values be configurable from the constructor
 const scheme = "http"
-const host = "localhost"
+const host = "192.168.1.7"
 const port = "5984"
 const databaseName = "group_lists"
 const username = "shop_together"

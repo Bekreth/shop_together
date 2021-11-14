@@ -14,6 +14,15 @@ import Switch from '@mui/material/Switch';
 import { DatabaseContext } from 'index';
 import { Item, ListData, PurchaseState } from 'listData'
 import CreateItem from 'views/lists/components/CreateItem';
+import EditItem from 'views/lists/components/EditItem';
+
+const emptyItem: Item = {
+  name: "",
+  description: "",
+  state: PurchaseState.TO_BUY,
+  created: new Date(),
+  updated: new Date(),
+}
 
 export interface ListContentsProps {
   focusedList: ListData
@@ -25,8 +34,9 @@ export default (props: ListContentsProps) => {
 
   const [listContents, setListContents] = useState(focusedList)
   const [showPurchased, setShowPurchased] = useState(false)
-  const [editingItems, setEditingItems] = useState(false)
+  const [editable, setEditability] = useState(false)
   const [creatingItem, setCreatingItem] = useState(false)
+  const [editingItem, setEditingItem] = useState(emptyItem)
 
   const toggleCart = (list: ListData, itemName: string) => {
     list.items
@@ -41,7 +51,7 @@ export default (props: ListContentsProps) => {
         }
         return item
       })
-    dbClient.updateList(list)
+    dbClient.updateList({...list})
       .then(setListContents)
       .catch(console.error)
   }
@@ -54,7 +64,7 @@ export default (props: ListContentsProps) => {
         }
         return item
       })
-    dbClient.updateList(list)
+    dbClient.updateList({...list})
       .then(setListContents)
       .catch(console.error)
   }
@@ -68,7 +78,7 @@ export default (props: ListContentsProps) => {
         item.state = PurchaseState.TO_BUY
         return item
       })
-    dbClient.updateList(list)
+    dbClient.updateList({...list})
       .then(setListContents)
       .catch(console.error)
   }
@@ -76,10 +86,29 @@ export default (props: ListContentsProps) => {
   const createItemAppender = (list: ListData) => {
     return (item: Item) => {
       list.items.push(item)
-      dbClient.updateList(list)
+      dbClient.updateList({...list})
         .then(setListContents)
         .catch(console.error)
     }
+  }
+
+  const openItemEditor = (item: Item) => {
+    setEditingItem(item)
+  }
+
+  const saveItemEdits = (originialItemName: string, item: Item) => {
+    const newItemList = listContents.items
+      .map(listItem => {
+        if (listItem.name === originialItemName) {
+          return item
+        }
+        return listItem
+      })
+    const updatedList = {...listContents, items: newItemList}
+    console.log("Update list", updatedList)
+    dbClient.updateList(updatedList)
+      .then(setListContents)
+      .catch(console.error)
   }
 
   return (
@@ -92,8 +121,8 @@ export default (props: ListContentsProps) => {
           Show Purchased Items
         </Button>
         <Button
-          variant={editingItems ? "contained" : "outlined"}
-          onClick={() => setEditingItems(!editingItems)}
+          variant={editable ? "contained" : "outlined"}
+          onClick={() => setEditability(!editable)}
         >
           Edit Items
         </Button>
@@ -120,11 +149,17 @@ export default (props: ListContentsProps) => {
         sx={{width: '80%', float: "right"}}
         subheader={<ListSubheader>Item List</ListSubheader>}
       >
-        {unpurchasedItems(listContents, toggleCart)}
+        {unpurchasedItems(listContents, toggleCart, editable, openItemEditor)}
         <Divider/>
         {showPurchased && 
           purchasedItems(listContents, returnToBuy)}
       </List>
+      <EditItem 
+        item={editingItem}
+        saveItemEdits={saveItemEdits}
+        isOpen={editingItem !== emptyItem }
+        close={() => setEditingItem(emptyItem)}
+      />
     </Box>
   )
 }
@@ -132,6 +167,8 @@ export default (props: ListContentsProps) => {
 const unpurchasedItems = (
   list: ListData,
   toggleItem: (list: ListData, itemName: string) => void,
+  editingItems: boolean,
+  openItemEditor: (item: Item) => void
 ) => {
   return ( 
     <Box>
@@ -147,6 +184,14 @@ const unpurchasedItems = (
             <ListItemText>
               {item.name}
             </ListItemText>
+            {editingItems &&
+              <Button
+                variant="outlined"
+                onClick={() => openItemEditor(item)} //TODO
+              >
+                Edit
+              </Button>
+            }
             <Switch 
               onChange={() => toggleItem(list, item.name)}
               checked={item.state === PurchaseState.IN_CART}

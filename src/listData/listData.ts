@@ -34,9 +34,9 @@ export enum PurchaseState {
 
 
 export enum TodoState {
-    TODO = "TODO",
-    IN_PROGRESS = "IN_PROGRESS",
-    DONE = "DONE"
+  TODO = "TODO",
+  IN_PROGRESS = "IN_PROGRESS",
+  DONE = "DONE"
 }
 
 export const makeList: (name: string) => ListData = (name: string) => {

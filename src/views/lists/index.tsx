@@ -34,35 +34,20 @@ export default (props: ListsProps) => {
 
   const [isOpen, setOpen] = useState(false)
   const [availableLists, setAvailableLists] = useState(emptyListNames)
-  const [listNameLookupError, setNameLookupError] = useState(false)
-  const [listLookupError, setLookupError] = useState(false)
-  // const [listNames, setListNames] = React.useState(emptyNamesList)
   const [focusedList, setFocusedList] = useState(emptyList)
 
   useEffect(() => {
     dbClient.getListNames()
-      .then(lists => {
-        setNameLookupError(false)
-        setAvailableLists(lists)
-      })
-      .catch(error => {
-        setNameLookupError(true)
-        console.error("failed to get list of list names", error)
-      })
+      .then(setAvailableLists)
+      .catch(console.error)
   }, [isOpen])
 
   useEffect(() => {
     const filteredListName = availableLists.filter(name => name === listName)
     if (filteredListName.length === 1 && filteredListName[0] !== "") {
       dbClient.getListByName(filteredListName[0])
-        .then(data => {
-          setLookupError(false)
-          setFocusedList(data)
-        })
-        .catch(error => {
-          console.error("failed to get lists", error)
-          setLookupError(true)
-        })
+        .then(setFocusedList)
+        .catch(console.error)
     }
   }, [listName, availableLists])
 
@@ -70,7 +55,7 @@ export default (props: ListsProps) => {
     return dbClient.createList(listData)
       .then(rev => {
         availableLists.push(listData.name)
-        setAvailableLists(availableLists)
+        setAvailableLists({...availableLists})
         return rev
       })
   }

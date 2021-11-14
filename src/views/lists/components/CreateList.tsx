@@ -28,7 +28,6 @@ export interface CreateListProps {
 export default (props: CreateListProps) => {
   const {isOpen, close, appendList} = props
   const [listName, setListName] = useState("")
-  const [insertionError, setInsertionError] = useState(false)
 
   return (
     <Modal
