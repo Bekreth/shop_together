@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from 'react';
+import {useContext, useState} from 'react';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -104,11 +104,26 @@ export default (props: ListContentsProps) => {
         }
         return listItem
       })
-    const updatedList = {...listContents, items: newItemList}
-    console.log("Update list", updatedList)
-    dbClient.updateList(updatedList)
+    dbClient.updateList({...listContents, items: newItemList})
       .then(setListContents)
       .catch(console.error)
+  }
+
+  const deleteItem = (item: Item) => {
+    const newItemList = listContents.items
+      .filter(listItem => listItem.name !== item.name)
+    dbClient.updateList({...listContents, items: newItemList})
+      .then(setListContents)
+      .catch(console.error)
+  }
+
+  const modifiableItems = {
+    list: listContents,
+    editingItems: editable,
+    toggleItem: toggleCart,
+    returnToBuy: returnToBuy,
+    openItemEditor: openItemEditor,
+    deleteItem: deleteItem
   }
 
   return (
@@ -149,10 +164,9 @@ export default (props: ListContentsProps) => {
         sx={{width: '80%', float: "right"}}
         subheader={<ListSubheader>Item List</ListSubheader>}
       >
-        {unpurchasedItems(listContents, toggleCart, editable, openItemEditor)}
+        {unpurchasedItems(modifiableItems)}
         <Divider/>
-        {showPurchased && 
-          purchasedItems(listContents, returnToBuy)}
+        {showPurchased && purchasedItems(modifiableItems)}
       </List>
       <EditItem 
         item={editingItem}
@@ -164,12 +178,14 @@ export default (props: ListContentsProps) => {
   )
 }
 
-const unpurchasedItems = (
+const unpurchasedItems = (input: {
   list: ListData,
   toggleItem: (list: ListData, itemName: string) => void,
   editingItems: boolean,
-  openItemEditor: (item: Item) => void
-) => {
+  openItemEditor: (item: Item) => void,
+  deleteItem: (item: Item) => void
+}) => {
+  const {list, toggleItem, editingItems, openItemEditor, deleteItem} = input
   return ( 
     <Box>
       {list.items
@@ -185,12 +201,21 @@ const unpurchasedItems = (
               {item.name}
             </ListItemText>
             {editingItems &&
-              <Button
-                variant="outlined"
-                onClick={() => openItemEditor(item)} //TODO
-              >
-                Edit
-              </Button>
+              <Box>
+                <Button
+                  variant="outlined"
+                  onDoubleClick={() => deleteItem(item)}
+                  color='warning'
+                >
+                  Delete
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => openItemEditor(item)}
+                >
+                  Edit
+                </Button>
+              </Box>
             }
             <Switch 
               onChange={() => toggleItem(list, item.name)}
@@ -203,10 +228,14 @@ const unpurchasedItems = (
   )
 }
 
-const purchasedItems = (
+const purchasedItems = (input: {
   list: ListData,
   returnToBuy: (list: ListData, itemName: string) => void,
-) => {
+  editingItems: boolean,
+  openItemEditor: (item: Item) => void,
+  deleteItem: (item: Item) => void
+}) => {
+  const {list, returnToBuy, editingItems, openItemEditor, deleteItem} = input
   return (
     <Box>
       <ListSubheader>Already Purchased</ListSubheader>
@@ -219,6 +248,23 @@ const purchasedItems = (
             <ListItemText>
               {item.name}
             </ListItemText>
+            {editingItems &&
+              <Box>
+                <Button
+                  variant="outlined"
+                  onClick={() => openItemEditor(item)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="outlined"
+                  onDoubleClick={() => deleteItem(item)}
+                  color='warning'
+                >
+                  Delete
+                </Button>
+              </Box>
+            }
             <Button
               onClick={() => returnToBuy(list, item.name)}
             >
