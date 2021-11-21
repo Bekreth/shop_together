@@ -1,6 +1,6 @@
 import {v4 as uuidv4} from 'uuid'
 
-export interface ListData extends ListMetadata, Items {}
+export interface ListData extends ListMetadata, ListHeader, Items {}
 
 export enum ListType {
     SHOPPING = "SHOPPING",
@@ -10,6 +10,10 @@ export enum ListType {
 export interface ListMetadata {
   _id: string
   _rev?: string
+  _deleted?: boolean
+}
+
+export interface ListHeader {
   name: string
   type: ListType
 }
@@ -21,7 +25,7 @@ export interface Items {
 export interface Item {
   name: string
   description: string
-  state: PurchaseState | TodoState
+  state: PurchaseState 
   created: Date
   updated: Date
 }
@@ -32,12 +36,6 @@ export enum PurchaseState {
   PURCHASED = "PURCHASED"
 }
 
-
-export enum TodoState {
-  TODO = "TODO",
-  IN_PROGRESS = "IN_PROGRESS",
-  DONE = "DONE"
-}
 
 export const makeList: (name: string) => ListData = (name: string) => {
   return {

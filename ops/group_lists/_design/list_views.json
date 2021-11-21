@@ -2,7 +2,13 @@
   "views": {
     "listNames": {
       "reduce": "function (keys, values, rereduce) {\n  if (rereduce) {\n    return [...values[0], ...values[1]];\n  } else {\n    return values;\n  }\n}",
-      "map": "function (doc) {\n  emit(null, {\n    _id: doc._id,\n    _rev: doc._rev,\n    name: doc.name,\n    type: doc.type\n  });\n}"
+      "map": "function (doc) {\n  emit(doc.name, doc.name);\n}"
+    },
+    "listByName": {
+      "map": "function (doc) {\n  emit(doc.name, doc);\n}"
+    },
+    "conflictingLists": {
+      "map": "function(doc) {\n  if(doc._conflicts) {\n    emit(doc.type, [doc._rev, ...doc._conflicts]);\n  }\n}"
     }
   },
   "language": "javascript"

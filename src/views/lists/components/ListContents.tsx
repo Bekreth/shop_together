@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -38,6 +38,8 @@ export default (props: ListContentsProps) => {
   const [creatingItem, setCreatingItem] = useState(false)
   const [editingItem, setEditingItem] = useState(emptyItem)
 
+  useEffect(() => setListContents(focusedList), [focusedList])
+
   const toggleCart = (list: ListData, itemName: string) => {
     list.items
       .map(item => { 
@@ -49,6 +51,7 @@ export default (props: ListContentsProps) => {
         } else if (item.state === PurchaseState.IN_CART) {
           item.state = PurchaseState.TO_BUY
         }
+        item.updated = new Date()
         return item
       })
     dbClient.updateList({...list})
@@ -62,6 +65,7 @@ export default (props: ListContentsProps) => {
         if (item.state === PurchaseState.IN_CART) {
           item.state = PurchaseState.PURCHASED
         }
+        item.updated = new Date()
         return item
       })
     dbClient.updateList({...list})
@@ -76,6 +80,7 @@ export default (props: ListContentsProps) => {
           return item
         }
         item.state = PurchaseState.TO_BUY
+        item.updated = new Date()
         return item
       })
     dbClient.updateList({...list})

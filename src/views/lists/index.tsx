@@ -13,7 +13,6 @@ import ShoppingLists from 'views/lists/components/ShoppingLists';
 import { ListData, ListType } from 'listData'
 import { DatabaseContext } from 'index';
 
-const emptyNamesList: string[] = []
 const emptyList: ListData = {
   _id: "",
   name: "",
@@ -23,11 +22,7 @@ const emptyList: ListData = {
 
 const emptyListNames: string[] = []
 
-export interface ListsProps {
-  listData: ListData[]
-}
-
-export default (props: ListsProps) => {
+export default () => {
   const {listName} = useParams()
 
   const dbClient = useContext(DatabaseContext)

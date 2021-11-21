@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createContext, useContext, useEffect } from "react";
-import ListStorage from "listStorage";
+import { createContext } from "react";
+import { ListStorage } from 'listStorage';
 
 const dbClient = new ListStorage()
 export const DatabaseContext = createContext(dbClient)
