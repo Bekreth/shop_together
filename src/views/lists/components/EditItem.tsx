@@ -31,7 +31,6 @@ export default (props: EditItemProps) => {
   const {item, saveItemEdits, isOpen, close} = props
 
   const [itemName, setItemName] = useState(item.name)
-  const [itemDescription, setItemDescription] = useState(item.description)
   const [itemState, setItemState] = useState(item.state)
 
   return (
@@ -56,9 +55,10 @@ export default (props: EditItemProps) => {
           variant="contained"
           onClick={() => {
             const newItem: Item = {
+              _id: item._id,
+              _rev: item._rev,
               name: itemName,
               state: itemState,
-              description: itemDescription,
               created: item.created,
               updated: new Date(),
             }

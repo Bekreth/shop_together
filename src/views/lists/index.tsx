@@ -13,11 +13,14 @@ import ShoppingLists from 'views/lists/components/ShoppingLists';
 import { ListData, ListType } from 'listData'
 import { DatabaseContext } from 'index';
 
+//TODO: need a better setup than this
 const emptyList: ListData = {
   _id: "",
   name: "",
   type: ListType.SHOPPING,
-  items: []
+  created: new Date(),
+  updated: new Date(),
+  items: {}
 }
 
 const emptyListNames: string[] = []

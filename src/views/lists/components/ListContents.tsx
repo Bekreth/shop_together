@@ -17,8 +17,8 @@ import CreateItem from 'views/lists/components/CreateItem';
 import EditItem from 'views/lists/components/EditItem';
 
 const emptyItem: Item = {
+  _id: "",
   name: "",
-  description: "",
   state: PurchaseState.TO_BUY,
   created: new Date(),
   updated: new Date(),
@@ -40,27 +40,22 @@ export default (props: ListContentsProps) => {
 
   useEffect(() => setListContents(focusedList), [focusedList])
 
-  const toggleCart = (list: ListData, itemName: string) => {
-    list.items
-      .map(item => { 
-        if (item.name !== itemName) {
-          return item
-        }
-        if (item.state === PurchaseState.TO_BUY) {
-          item.state = PurchaseState.IN_CART
-        } else if (item.state === PurchaseState.IN_CART) {
-          item.state = PurchaseState.TO_BUY
-        }
-        item.updated = new Date()
-        return item
-      })
+  const toggleCart = (list: ListData, itemID: string) => {
+    const itemState = list.items[itemID].state 
+    if (itemState === PurchaseState.TO_BUY) {
+      list.items[itemID].state = PurchaseState.IN_CART
+    } else if (itemState === PurchaseState.IN_CART) {
+      list.items[itemID].state = PurchaseState.TO_BUY
+    }
+    list.items[itemID].updated = new Date()
     dbClient.updateList({...list})
       .then(setListContents)
       .catch(console.error)
   }
 
   const purchaseItems = (list: ListData) => {
-    list.items
+    Object.keys(list.items)
+      .map(itemKey => list.items[itemKey])
       .map(item => {
         if (item.state === PurchaseState.IN_CART) {
           item.state = PurchaseState.PURCHASED
@@ -73,16 +68,9 @@ export default (props: ListContentsProps) => {
       .catch(console.error)
   }
 
-  const returnToBuy = (list: ListData, itemName: string) => {
-    list.items
-      .map(item => {
-        if (item.name !== itemName) {
-          return item
-        }
-        item.state = PurchaseState.TO_BUY
-        item.updated = new Date()
-        return item
-      })
+  const returnToBuy = (list: ListData, itemID: string) => {
+    list.items[itemID].state = PurchaseState.TO_BUY
+    list.items[itemID].updated = new Date()
     dbClient.updateList({...list})
       .then(setListContents)
       .catch(console.error)
@@ -90,7 +78,7 @@ export default (props: ListContentsProps) => {
 
   const createItemAppender = (list: ListData) => {
     return (item: Item) => {
-      list.items.push(item)
+      list.items[item._id] = item
       dbClient.updateList({...list})
         .then(setListContents)
         .catch(console.error)
@@ -101,23 +89,16 @@ export default (props: ListContentsProps) => {
     setEditingItem(item)
   }
 
-  const saveItemEdits = (originialItemName: string, item: Item) => {
-    const newItemList = listContents.items
-      .map(listItem => {
-        if (listItem.name === originialItemName) {
-          return item
-        }
-        return listItem
-      })
-    dbClient.updateList({...listContents, items: newItemList})
+  const saveItemEdits = (itemID: string, item: Item) => {
+    listContents.items[itemID] = item
+    dbClient.updateList({...listContents})
       .then(setListContents)
       .catch(console.error)
   }
 
   const deleteItem = (item: Item) => {
-    const newItemList = listContents.items
-      .filter(listItem => listItem.name !== item.name)
-    dbClient.updateList({...listContents, items: newItemList})
+    delete listContents.items[item._id]
+    dbClient.updateList({...listContents})
       .then(setListContents)
       .catch(console.error)
   }
@@ -185,7 +166,7 @@ export default (props: ListContentsProps) => {
 
 const unpurchasedItems = (input: {
   list: ListData,
-  toggleItem: (list: ListData, itemName: string) => void,
+  toggleItem: (list: ListData, itemID: string) => void,
   editingItems: boolean,
   openItemEditor: (item: Item) => void,
   deleteItem: (item: Item) => void
@@ -193,7 +174,7 @@ const unpurchasedItems = (input: {
   const {list, toggleItem, editingItems, openItemEditor, deleteItem} = input
   return ( 
     <Box>
-      {list.items
+      {Object.keys(list.items).map(itemKey => list.items[itemKey])
         .filter((item) => (
           item.state !== PurchaseState.PURCHASED
         ))
@@ -223,7 +204,7 @@ const unpurchasedItems = (input: {
               </Box>
             }
             <Switch 
-              onChange={() => toggleItem(list, item.name)}
+              onChange={() => toggleItem(list, item._id)}
               checked={item.state === PurchaseState.IN_CART}
             />
           </ListItem>
@@ -235,16 +216,17 @@ const unpurchasedItems = (input: {
 
 const purchasedItems = (input: {
   list: ListData,
-  returnToBuy: (list: ListData, itemName: string) => void,
+  returnToBuy: (list: ListData, itemID: string) => void,
   editingItems: boolean,
   openItemEditor: (item: Item) => void,
   deleteItem: (item: Item) => void
 }) => {
   const {list, returnToBuy, editingItems, openItemEditor, deleteItem} = input
+
   return (
     <Box>
       <ListSubheader>Already Purchased</ListSubheader>
-      {list.items
+      {Object.keys(list.items).map(itemKey => list.items[itemKey])
         .filter((item) => (
           item.state === PurchaseState.PURCHASED
         ))
@@ -271,7 +253,7 @@ const purchasedItems = (input: {
               </Box>
             }
             <Button
-              onClick={() => returnToBuy(list, item.name)}
+              onClick={() => returnToBuy(list, item._id)}
             >
               Readd to List
             </Button>

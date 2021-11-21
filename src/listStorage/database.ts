@@ -24,6 +24,7 @@ export class ListStorage {
       auto_compaction: true
     }
 
+    // this.db.destroy()
     PouchDB.sync(remoteDB, this.db, options)
   }
 

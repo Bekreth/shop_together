@@ -1,13 +1,12 @@
 import {v4 as uuidv4} from 'uuid'
 
-export interface ListData extends ListMetadata, ListHeader, Items {}
+export interface ListData extends StorageMetadata, ListHeader, Items {}
 
 export enum ListType {
     SHOPPING = "SHOPPING",
-    TODO = "TODO"
 } 
 
-export interface ListMetadata {
+export interface StorageMetadata {
   _id: string
   _rev?: string
   _deleted?: boolean
@@ -16,15 +15,17 @@ export interface ListMetadata {
 export interface ListHeader {
   name: string
   type: ListType
+  created: Date
+  updated: Date
 }
 
+export type ItemKey = {[key: string]: Item}
 export interface Items {
-  items: Item[]
+  items: ItemKey
 }
 
-export interface Item {
+export interface Item extends StorageMetadata{
   name: string
-  description: string
   state: PurchaseState 
   created: Date
   updated: Date
@@ -40,17 +41,18 @@ export enum PurchaseState {
 export const makeList: (name: string) => ListData = (name: string) => {
   return {
       _id: uuidv4(),
-    //   _rev: "Gotta make this better", // TODO: Needs better construction
       name: name,
       type: ListType.SHOPPING, // TODO: this needs a real value
-      items: []
+      created: new Date(),
+      updated: new Date(),
+      items: {}
   }
 }
 
 export const makeItem: (name: string) => Item = (name: string) => {
   return {
+    _id: uuidv4(),
     name: name,
-    description: "", //TODO: This needs a real value
     state: PurchaseState.TO_BUY,
     created: new Date(),
     updated: new Date()

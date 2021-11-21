@@ -1,8 +1,9 @@
-import { ListMetadata } from "listData"
+import { StorageMetadata } from "listData"
 
-type LookupToResolution<T extends ListMetadata> = (lookups: ConflictLookup[]) => Promise<ConflictResolution<T>>[]
-type PromiseReducer<T extends ListMetadata> = (previous: Promise<ConflictResolution<T>>, current: Promise<ConflictResolution<T>>) => Promise<ConflictResolution<T>>
-type MetadataExpander<T extends ListMetadata> = (resolution: Promise<ConflictResolution<T>>) => Promise<ListMetadata[]> 
+type LookupToResolution<T extends StorageMetadata> = (lookups: ConflictLookup[]) => Promise<ConflictResolution<T>>[]
+type PromiseReducer<T extends StorageMetadata> = (previous: Promise<ConflictResolution<T>>, current: Promise<ConflictResolution<T>>) => Promise<ConflictResolution<T>>
+type MetadataExpander<T extends StorageMetadata> = (resolution: Promise<ConflictResolution<T>>) => Promise<StorageMetadata[]> 
+export type ResolverFunction<T extends StorageMetadata> = (previous: T, current: T) => T
 
 export interface ConflictEntry {
   id: string
@@ -16,20 +17,20 @@ export interface ConflictLookup {
   currentHead: string
 }
 
-export interface ConflictResolution<T extends ListMetadata> {
+export interface ConflictResolution<T extends StorageMetadata> {
   resolvedData: T
   headRevision: string
   deadendRevisions: string[]
 }
 
-export interface ConflictResolver<T extends ListMetadata> {
+export interface ConflictResolver<T extends StorageMetadata> {
   findConflicts: () => Promise<ConflictEntry[]>
   findDocument: (lookup: ConflictLookup) => Promise<T>
-  resolveConflicts: (previous: T, current: T) => T
-  sinkBulkMessage: (bulkMessage: Promise<ListMetadata[]>) => void
+  resolveConflicts: ResolverFunction<T>
+  sinkBulkMessage: (bulkMessage: Promise<StorageMetadata[]>) => void
 }
 
-export function resolveConflicts<T extends ListMetadata>(resolver: ConflictResolver<T>) {
+export function resolveConflicts<T extends StorageMetadata>(resolver: ConflictResolver<T>) {
   const lookupsToResolutions = buildLookupsToResolutions(resolver)
   const reducer = buildPromiseReducer(resolver)
   const bulkMessage = buildBulkWrite(resolver)
@@ -54,7 +55,7 @@ function buildLookups(entry: ConflictEntry): ConflictLookup[] {
   })
 }
 
-function buildLookupsToResolutions<T extends ListMetadata>(resolver: ConflictResolver<T>): LookupToResolution<T> {
+function buildLookupsToResolutions<T extends StorageMetadata>(resolver: ConflictResolver<T>): LookupToResolution<T> {
   return (lookups: ConflictLookup[]) => {
     return lookups.map(lookup => {
       return resolver.findDocument(lookup)
@@ -70,7 +71,7 @@ function buildLookupsToResolutions<T extends ListMetadata>(resolver: ConflictRes
   }
 }
 
-function buildPromiseReducer<T extends ListMetadata>(resolver: ConflictResolver<T>): PromiseReducer<T> {
+function buildPromiseReducer<T extends StorageMetadata>(resolver: ConflictResolver<T>): PromiseReducer<T> {
   return (previous, current) => {
     return new Promise<ConflictResolution<T>>((resolve, reject) => {
       previous.then(previousList => {
@@ -94,7 +95,7 @@ function buildPromiseReducer<T extends ListMetadata>(resolver: ConflictResolver<
   }
 }
 
-function buildBulkWrite<T extends ListMetadata>(resolver: ConflictResolver<T>): MetadataExpander<T> {
+function buildBulkWrite<T extends StorageMetadata>(resolver: ConflictResolver<T>): MetadataExpander<T> {
   return (fullResolution: Promise<ConflictResolution<T>>) => {
     return fullResolution.then(resolved => {
       return [resolved.resolvedData,

@@ -1,20 +1,20 @@
 {
   "name": "Second List",
   "type": "SHOPPING",
-  "items": [
-    {
+  "items": { 
+    "Id1": {
+      "_id": "Id1",
       "name": "Milk",
-      "description": "something",
       "state": "TO_BUY",
       "updated": "",
       "created": ""
     },
-    {
+    "Id2": {
+      "_id": "Id1",
       "name": "Pickles",
-      "description": "something",
       "state": "IN_CART",
       "updated": "",
       "created": ""
     }
-  ]
+  }
 }

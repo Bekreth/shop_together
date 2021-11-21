@@ -1,27 +1,27 @@
 {
   "name": "Regular Shopping",
   "type": "SHOPPING",
-  "items": [
-    {
+  "items": { 
+    "Id1": {
+      "_id": "Id1",
       "name": "Apples",
-      "description": "something",
       "state": "TO_BUY",
       "updated": "",
       "created": ""
     },
-    {
+    "Id2": {
+      "_id": "Id2",
       "name": "Bananas",
-      "description": "something",
       "state": "IN_CART",
       "updated": "",
       "created": ""
     },
-    {
+    "Id3": {
+      "_id": "Id3",
       "name": "Sugar",
-      "description": "something",
       "state": "PURCHASED",
       "updated": "",
       "created": ""
     }
-  ]
+  }
 }
