@@ -24,7 +24,7 @@ export interface Items {
   items: ItemKey
 }
 
-export interface Item extends StorageMetadata{
+export interface Item extends StorageMetadata {
   name: string
   state: PurchaseState 
   created: Date
