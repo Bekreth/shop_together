@@ -24,6 +24,10 @@ export default (props: ShoppingListsProps) => {
   const {listNames, closeDrawer, appendList} = props
   const navigate = useNavigate()
 
+  const createListNavigate = (newList: string) => {
+    navigate(`/lists/${encodeURIComponent(newList)}`)
+    closeDrawer()
+  }
 
   return (
     <List>
@@ -31,7 +35,7 @@ export default (props: ShoppingListsProps) => {
         ShoppingList(listName, navigate, closeDrawer)
       ))}
       <Divider/>
-      {ListActions(appendList)}
+      {ListActions(appendList, createListNavigate)}
     </List>
   )
 }
@@ -59,7 +63,10 @@ const ShoppingList = (
   )
 }
 
-const ListActions = (appendList: (listData: ListData) => Promise<string>) => {
+const ListActions = (
+  appendList: (listData: ListData) => Promise<string>,
+  navigate: (listName: string) => void
+) => {
   const createList = "Create List"
   const editList = "Edit List"
   const [isCreatingList, setCreatingList] = useState(false)
@@ -85,6 +92,7 @@ const ListActions = (appendList: (listData: ListData) => Promise<string>) => {
       <CreateList 
         isOpen={isCreatingList} 
         close={() => setCreatingList(false)}
+        navigate={navigate}
         appendList={appendList}
       />
     </Box>

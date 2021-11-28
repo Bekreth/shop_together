@@ -1,5 +1,5 @@
-import { Item, ListData } from "listData";
-import { JoinedMapKeys, missing_map_keys } from "utils/missing_map_keys";
+import { ListData } from "listData";
+import { JoinedMapKeys, missing_map_keys } from "utils/missingMapKeys";
 import { itemResolver } from "./items";
 
 export const shoppingListResolver = (previous: ListData, current: ListData) => {

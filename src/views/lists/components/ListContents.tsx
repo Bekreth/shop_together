@@ -40,6 +40,10 @@ export default (props: ListContentsProps) => {
 
   useEffect(() => setListContents(focusedList), [focusedList])
 
+  useEffect(() => {
+    dbClient.watchList(focusedList, setListContents)
+  }, [dbClient, focusedList])
+
   const toggleCart = (list: ListData, itemID: string) => {
     const itemState = list.items[itemID].state 
     if (itemState === PurchaseState.TO_BUY) {

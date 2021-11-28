@@ -38,7 +38,7 @@ export default () => {
     dbClient.getListNames()
       .then(setAvailableLists)
       .catch(console.error)
-  }, [isOpen])
+  }, [dbClient, isOpen])
 
   useEffect(() => {
     const filteredListName = availableLists.filter(name => name === listName)
@@ -47,13 +47,13 @@ export default () => {
         .then(setFocusedList)
         .catch(console.error)
     }
-  }, [listName, availableLists])
+  }, [dbClient, listName, availableLists])
 
   const listAppender: (listData: ListData) => Promise<string> = (listData: ListData) => {
     return dbClient.createList(listData)
       .then(rev => {
         availableLists.push(listData.name)
-        setAvailableLists({...availableLists})
+        setAvailableLists([ ...availableLists ])
         return rev
       })
   }

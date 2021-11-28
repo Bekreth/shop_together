@@ -1,9 +1,23 @@
-import { ListData } from "listData";
+import { inputUnstyledClasses } from "@mui/base";
+import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
+import { ListData, StorageMetadata } from "listData";
 import { databaseName, host, password, port, scheme, username } from "listStorage";
 import PouchDB from "pouchdb";
 
+const design_doc = 'list_views.json'
+enum View {
+  ConflictingLists = 'conflictingLists',
+  ListByName = 'listByName',
+  ListNames = 'listNames',
+}
+
+const get_view = (view: View) => {
+  return `${design_doc}/${view}`
+}
+
 export class ListStorage {
   private db: PouchDB.Database;
+  private watching?: PouchDB.Core.Changes<ListData>
 
   constructor() {
     console.log("Started the db connect")
@@ -29,13 +43,13 @@ export class ListStorage {
   }
 
   async getListNames(): Promise<string[]> {
-    const message = await this.db.query("list_views.json/listNames", {reduce: true})
+    const message = await this.db.query(get_view(View.ListNames), {reduce: true})
     const output: string[] = message.rows.map(row => row.value)[0]
     return output
   }
 
   async getListByName(name: string): Promise<ListData> {
-    const message = await this.db.query("list_views.json/listByName", {key: name})
+    const message = await this.db.query(get_view(View.ListByName), {key: name})
     const output: ListData = message.rows[0].value
     return output
   }
@@ -49,6 +63,22 @@ export class ListStorage {
     const putObject = await this.db.put(data)
     data._rev = putObject.rev
     return data
+  }
+
+
+  watchList(input: StorageMetadata, setListData: (data: ListData) => void) {
+    if (this.watching !== undefined) this.watching.cancel()
+
+    const {_id} = input
+    this.watching = this.db.changes<ListData>({
+      since: 'now',
+      live: true,
+      include_docs: true,
+      doc_ids: [_id],
+    }).on("change", (change) => {
+      if (change.doc === undefined) return
+      setListData(change.doc)
+    })
   }
 
   /*

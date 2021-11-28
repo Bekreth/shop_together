@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -22,12 +23,22 @@ const style = {
 export interface CreateListProps {
   isOpen: boolean
   close: () => void
+  navigate: (newList: string) => void
   appendList: (listData: ListData) => Promise<string>
 }
 
 export default (props: CreateListProps) => {
-  const {isOpen, close, appendList} = props
+  const {isOpen, close, navigate, appendList} = props
   const [listName, setListName] = useState("")
+
+  const createList = () => {
+    appendList(makeList(listName))
+      .then(rev => close())
+      .catch(error => (
+        console.error("failed to insert", error)
+      ))
+    navigate(listName)
+  }
 
   return (
     <Modal
@@ -45,17 +56,15 @@ export default (props: CreateListProps) => {
           onChange={event => {
             setListName(event.target.value)
           }}
+          onKeyDown={event => {
+            if (event.code === "Enter") createList()
+          }}
+          autoFocus
         />
         <br/>
         <Button
           variant="contained"
-          onClick={() => {
-            appendList(makeList(listName))
-              .then(rev => close())
-              .catch(error => (
-                console.error("failed to insert", error)
-              ))
-          }}
+          onClick={createList}
         >
           Create
         </Button>

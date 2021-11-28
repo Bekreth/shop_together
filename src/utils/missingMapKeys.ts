@@ -10,21 +10,11 @@ function left(input: string): LeftRight {
   }
 }
 
-function add_left(base: LeftRight, input: string): LeftRight {
-  base.left.push(input)
-  return base
-}
-
 function right(input: string): LeftRight {
   return {
     left: [],
     right: [input]
   }
-}
-
-function add_right(base: LeftRight, input: string): LeftRight {
-  base.right.push(input)
-  return base
 }
 
 function reduce_left_right(previous: LeftRight, current: LeftRight): LeftRight {

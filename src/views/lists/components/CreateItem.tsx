@@ -30,6 +30,13 @@ export default (props: CreateItemProps) => {
   const {listName, addItem, isOpen, close} = props
   const [itemName, setItemName] = React.useState("")
 
+  const createItem = () => {
+    if (itemName !== "") {
+      const newItem = makeItem(itemName)
+      addItem(newItem)
+    }
+    close()
+  }
 
   return (
     <Modal
@@ -50,17 +57,15 @@ export default (props: CreateItemProps) => {
           onChange={event => {
             setItemName(event.target.value)
           }}
+          onKeyDown={event => {
+            if (event.code === "Enter") createItem()
+          }}
+          autoFocus
         />
         <br/>
         <Button
           variant="contained"
-          onClick={() => {
-            if (itemName !== "") {
-              const newItem = makeItem(itemName)
-              addItem(newItem)
-            }
-            close()
-          }}
+          onClick={createItem}
         >
           Add To List
         </Button>

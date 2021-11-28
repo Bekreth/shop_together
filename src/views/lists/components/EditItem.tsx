@@ -31,7 +31,7 @@ export default (props: EditItemProps) => {
   const {item, saveItemEdits, isOpen, close} = props
 
   const [itemName, setItemName] = useState(item.name)
-  const [itemState, setItemState] = useState(item.state)
+  const [itemState] = useState(item.state)
 
   return (
     <Modal

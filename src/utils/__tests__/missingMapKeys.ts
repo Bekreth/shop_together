@@ -1,4 +1,4 @@
-import { JoinedMapKeys, missing_map_keys, reduce_joined_map_keys } from "utils/missing_map_keys";
+import { JoinedMapKeys, missing_map_keys, reduce_joined_map_keys } from "utils/missingMapKeys";
 
 test("Map keys don't overlap", () => {
   const input1: JoinedMapKeys = {
