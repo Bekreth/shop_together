@@ -7,10 +7,10 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/lists" />} />
         <Route path="/login" element={<BasicCard />} />
         <Route path="/lists" element={<Lists />} />
         <Route path="/lists/:listName" element={<Lists />} />
+        <Route path="/*" element={<Navigate to="/lists" />} />
       </Routes>
     </Router>
   );

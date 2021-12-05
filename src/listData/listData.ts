@@ -52,6 +52,8 @@ export const makeList: (name: string) => ListData = (name: string) => {
 export const makeItem: (name: string) => Item = (name: string) => {
   return {
     _id: uuidv4(),
+    // TODO: Remove this rev and have items be their own object
+    _rev: uuidv4(),
     name: name,
     state: PurchaseState.TO_BUY,
     created: new Date(),

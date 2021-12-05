@@ -8,8 +8,8 @@
       "map": "function (doc) {\n  emit(doc.name, doc);\n}"
     },
     "conflictingLists": {
-      "map": "function(doc) {\n  if(doc._conflicts) {\n    emit(doc.type, [doc._rev, ...doc._conflicts]);\n  }\n}"
+      "map": "function(doc) {\n  if(doc._conflicts) {\n    emit(doc._id, [doc._rev, ...doc._conflicts]);\n  }\n}"
     }
   },
   "language": "javascript"
-}  
+}

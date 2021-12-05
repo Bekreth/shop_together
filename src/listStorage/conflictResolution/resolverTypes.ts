@@ -46,7 +46,7 @@ export function resolveConflicts<T extends StorageMetadata>(resolver: ConflictRe
 }
 
 function buildLookups(entry: ConflictEntry): ConflictLookup[] {
-  return [entry.key, ...entry.value].map(rev => {
+  return [...entry.value].map(rev => {
     return {
       _id: entry.id,
       _rev: rev,
@@ -55,7 +55,9 @@ function buildLookups(entry: ConflictEntry): ConflictLookup[] {
   })
 }
 
-function buildLookupsToResolutions<T extends StorageMetadata>(resolver: ConflictResolver<T>): LookupToResolution<T> {
+function buildLookupsToResolutions<T extends StorageMetadata>(
+  resolver: ConflictResolver<T>
+): LookupToResolution<T> {
   return (lookups: ConflictLookup[]) => {
     return lookups.map(lookup => {
       return resolver.findDocument(lookup)

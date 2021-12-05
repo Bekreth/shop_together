@@ -1,27 +1,28 @@
-import { inputUnstyledClasses } from "@mui/base";
-import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
 import { ListData, StorageMetadata } from "listData";
-import { databaseName, host, password, port, scheme, username } from "listStorage";
+import { 
+  buildShoppingResolver, 
+  databaseName, 
+  host, 
+  password, 
+  port, 
+  scheme, 
+  username, 
+  get_view, 
+  cleanup_timer,
+  View 
+} from "listStorage";
 import PouchDB from "pouchdb";
-
-const design_doc = 'list_views.json'
-enum View {
-  ConflictingLists = 'conflictingLists',
-  ListByName = 'listByName',
-  ListNames = 'listNames',
-}
-
-const get_view = (view: View) => {
-  return `${design_doc}/${view}`
-}
+import { ConflictEntry, ConflictResolver, resolveConflicts } from "./conflictResolution";
 
 export class ListStorage {
   private db: PouchDB.Database;
+  private shoppingListResolver: ConflictResolver<ListData>;
   private watching?: PouchDB.Core.Changes<ListData>
 
   constructor() {
     console.log("Started the db connect")
     this.db = new PouchDB(databaseName)
+    this.shoppingListResolver = buildShoppingResolver(this.db);
     const remote = `${scheme}://${host}:${port}/${databaseName}`;
     const remoteDB = new PouchDB(remote, {
       skip_setup: true,
@@ -40,12 +41,13 @@ export class ListStorage {
 
     // this.db.destroy()
     PouchDB.sync(remoteDB, this.db, options)
+    setInterval(() => resolveConflicts(this.shoppingListResolver), cleanup_timer)
   }
 
   async getListNames(): Promise<string[]> {
     const message = await this.db.query(get_view(View.ListNames), {reduce: true})
     const output: string[] = message.rows.map(row => row.value)[0]
-    return output
+    return output ? output : []
   }
 
   async getListByName(name: string): Promise<ListData> {
@@ -65,7 +67,6 @@ export class ListStorage {
     return data
   }
 
-
   watchList(input: StorageMetadata, setListData: (data: ListData) => void) {
     if (this.watching !== undefined) this.watching.cancel()
 
@@ -80,17 +81,4 @@ export class ListStorage {
       setListData(change.doc)
     })
   }
-
-  /*
-  async handleConflicts() {
-    const message = await this.db.query("list_views.json/conflictingLists")
-    message.rows
-      .flatMap
-      .map
-      .reduceRight(this.reducePromises)
-      .then
-  }
-
-  */
-
 }

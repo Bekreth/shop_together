@@ -1,5 +1,7 @@
 import {useState, useEffect, useContext} from 'react';
+import { useNavigate } from 'react-router';
 import {useParams} from 'react-router-dom';
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -27,6 +29,7 @@ const emptyListNames: string[] = []
 
 export default () => {
   const {listName} = useParams()
+  const navigate = useNavigate()
 
   const dbClient = useContext(DatabaseContext)
 
@@ -42,6 +45,9 @@ export default () => {
 
   useEffect(() => {
     const filteredListName = availableLists.filter(name => name === listName)
+    if (filteredListName.length === 0) {
+      navigate('/lists')
+    }
     if (filteredListName.length === 1 && filteredListName[0] !== "") {
       dbClient.getListByName(filteredListName[0])
         .then(setFocusedList)
