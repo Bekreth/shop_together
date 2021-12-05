@@ -22,32 +22,38 @@ export const testListHeader: ListHeader = {
   updated: testDate1
 }
 
+export const testItem1 = {
+  _id: "item1ID",
+  _rev: "1_someRev1",
+  name: "Item1",
+  state: PurchaseState.TO_BUY,
+  created: testDate1,
+  updated: testDate1,
+}
+
+export const testItem2 = {
+  _id: "item2ID",
+  _rev: "1_someRev1",
+  name: "Item2",
+  state: PurchaseState.PURCHASED,
+  created: testDate1,
+  updated: testDate1,
+}
+
+export const testItem3 = {
+  _id: "item3ID",
+  _rev: "1_someRev1",
+  name: "Item3",
+  state: PurchaseState.IN_CART,
+  created: testDate1,
+  updated: testDate1,
+}
+
 export const testItemList: ItemKey = {  
-  "item1ID": {
-    _id: "item1ID",
-    _rev: "1_someRev1",
-    name: "Item1",
-    state: PurchaseState.TO_BUY,
-    created: testDate1,
-    updated: testDate1,
-  },
-  "item2ID": {
-    _id: "item2ID",
-    _rev: "1_someRev1",
-    name: "Item2",
-    state: PurchaseState.PURCHASED,
-    created: testDate1,
-    updated: testDate1,
-  },
-  "item3ID": {
-    _id: "item3ID",
-    _rev: "1_someRev1",
-    name: "Item3",
-    state: PurchaseState.IN_CART,
-    created: testDate1,
-    updated: testDate1,
-  }
- }
+  "item1ID": testItem1,
+  "item2ID": testItem2,
+  "item3ID": testItem3,
+}
 
 export const testList: ListData = {
   ...testMetadata1,
