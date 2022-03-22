@@ -1,2 +1,2 @@
-export * from 'listData/listData'
-export * from 'listData/serializer'
+export * from "listData/listData"
+export * from "listData/serializer"

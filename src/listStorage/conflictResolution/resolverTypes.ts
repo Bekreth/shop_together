@@ -31,84 +31,84 @@ export interface ConflictResolver<T extends StorageMetadata> {
 }
 
 export function resolveConflicts<T extends StorageMetadata>(resolver: ConflictResolver<T>) {
-  const lookupsToResolutions = buildLookupsToResolutions(resolver)
-  const reducer = buildPromiseReducer(resolver)
-  const bulkMessage = buildBulkWrite(resolver)
+	const lookupsToResolutions = buildLookupsToResolutions(resolver)
+	const reducer = buildPromiseReducer(resolver)
+	const bulkMessage = buildBulkWrite(resolver)
 
-  resolver.findConflicts()
-    .then(entries => {
-      entries.map(buildLookups)
-        .map(lookupsToResolutions)
-        .map(resolutions => resolutions.reduceRight(reducer))
-        .map(bulkMessage)
-        .forEach(resolver.sinkBulkMessage)
-    })
+	resolver.findConflicts()
+		.then(entries => {
+			entries.map(buildLookups)
+				.map(lookupsToResolutions)
+				.map(resolutions => resolutions.reduceRight(reducer))
+				.map(bulkMessage)
+				.forEach(resolver.sinkBulkMessage)
+		})
 }
 
 function buildLookups(entry: ConflictEntry): ConflictLookup[] {
-  return [...entry.value].map(rev => {
-    return {
-      _id: entry.id,
-      _rev: rev,
-      currentHead: entry.key
-    }
-  })
+	return [...entry.value].map(rev => {
+		return {
+			_id: entry.id,
+			_rev: rev,
+			currentHead: entry.key
+		}
+	})
 }
 
 function buildLookupsToResolutions<T extends StorageMetadata>(
-  resolver: ConflictResolver<T>
+	resolver: ConflictResolver<T>
 ): LookupToResolution<T> {
-  return (lookups: ConflictLookup[]) => {
-    return lookups.map(lookup => {
-      return resolver.findDocument(lookup)
-        .then(doc => {
-          const output: ConflictResolution<T> = {
-            resolvedData: doc as T,
-            headRevision: lookup.currentHead,
-            deadendRevisions: (lookup.currentHead !== lookup._rev) ? [lookup._rev] : []
-          }
-          return output
-        })
-    })
-  }
+	return (lookups: ConflictLookup[]) => {
+		return lookups.map(lookup => {
+			return resolver.findDocument(lookup)
+				.then(doc => {
+					const output: ConflictResolution<T> = {
+						resolvedData: doc as T,
+						headRevision: lookup.currentHead,
+						deadendRevisions: (lookup.currentHead !== lookup._rev) ? [lookup._rev] : []
+					}
+					return output
+				})
+		})
+	}
 }
 
 function buildPromiseReducer<T extends StorageMetadata>(resolver: ConflictResolver<T>): PromiseReducer<T> {
-  return (previous, current) => {
-    return new Promise<ConflictResolution<T>>((resolve, reject) => {
-      previous.then(previousList => {
-        current.then(currentList => {
-          resolve({
-            resolvedData: resolver.resolveConflicts(
-              previousList.resolvedData, 
-              currentList.resolvedData
-            ),
-            headRevision: previousList.headRevision,
-            deadendRevisions: [
-              ...previousList.deadendRevisions,
-              ...currentList.deadendRevisions,
-            ]
-          })
-        })
-        .catch(reject)
-      })
-      .catch(reject)
-    })
-  }
+	return (previous, current) => {
+		return new Promise<ConflictResolution<T>>((resolve, reject) => {
+			previous.then(previousList => {
+				current.then(currentList => {
+					resolve({
+						resolvedData: resolver.resolveConflicts(
+							previousList.resolvedData, 
+							currentList.resolvedData
+						),
+						headRevision: previousList.headRevision,
+						deadendRevisions: [
+							...previousList.deadendRevisions,
+							...currentList.deadendRevisions,
+						]
+					})
+				})
+					.catch(reject)
+			})
+				.catch(reject)
+		})
+	}
 }
 
 function buildBulkWrite<T extends StorageMetadata>(resolver: ConflictResolver<T>): MetadataExpander<T> {
-  return (fullResolution: Promise<ConflictResolution<T>>) => {
-    return fullResolution.then(resolved => {
-      return [resolved.resolvedData,
-        ...resolved.deadendRevisions.map(deadRev => {
-          return {
-            _id: resolved.resolvedData._id,
-            _rev: deadRev,
-            _deleted: true
-          }
-        })
-      ]
-    })
-  }
+	return (fullResolution: Promise<ConflictResolution<T>>) => {
+		return fullResolution.then(resolved => {
+			return [resolved.resolvedData,
+				...resolved.deadendRevisions.map(deadRev => {
+					return {
+						_id: resolved.resolvedData._id,
+						_rev: deadRev,
+						_deleted: true
+					}
+				})
+			]
+		})
+	}
 }

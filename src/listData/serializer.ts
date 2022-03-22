@@ -1,9 +1,9 @@
-import { ListData } from 'listData/listData'
+import { ListData } from "listData/listData"
 
 export const serializeList: (list: ListData) => string = (list: ListData) => {
-  return JSON.stringify(list)
+	return JSON.stringify(list)
 }
 
 export const deserializeList: (input: string) => ListData= (input: string) => {
-  return JSON.parse(input)
+	return JSON.parse(input)
 }
