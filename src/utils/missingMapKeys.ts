@@ -26,24 +26,24 @@ function reduce_left_right(previous: LeftRight, current: LeftRight): LeftRight {
 
 
 export type JoinedMapKeys = {
-	keys1: {[key: string]: Record<string, never>},
-	joint_keys: {[key: string]: Record<string, never>},
-	keys2: {[key: string]: Record<string, never>},
+	keys1: {[key: string]: unknown},
+	joint_keys: {[key: string]: unknown},
+	keys2: {[key: string]: unknown},
 }
 
 export function reduce_joined_map_keys(
 	previous: JoinedMapKeys, 
 	current: JoinedMapKeys,
 ): JoinedMapKeys {
-	const keys1: {[key: string]: Record<string, never>} = {
+	const keys1: {[key: string]: unknown} = {
 		...previous.keys1,
 		...current.keys1,
 	}
-	const center: {[key: string]: Record<string, never>} = {
+	const center: {[key: string]: unknown} = {
 		...previous.joint_keys,
 		...current.joint_keys,
 	}
-	const keys2: {[key: string]: Record<string, never>} = {
+	const keys2: {[key: string]: unknown} = {
 		...previous.keys2,
 		...current.keys2,
 	}
@@ -87,8 +87,8 @@ export function reduce_joined_map_keys(
 }
 
 export function missing_map_keys(
-	map1: {[key: string]: Record<string, never>},
-	map2: {[key: string]: Record<string, never>},
+	map1: {[key: string]: unknown},
+	map2: {[key: string]: unknown},
 ) : JoinedMapKeys {
 	const joint_keys_1: JoinedMapKeys[] = Object.keys(map1)
 		.map(key => {

@@ -10,6 +10,7 @@ import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
 import IconButton from "@mui/material/IconButton"
 import MenuIcon from "@mui/icons-material/Menu"
+import PersonIcon from "@mui/icons-material/Person"
 
 import ListContents from "views/lists/components/ListContents"
 import ShoppingLists from "views/lists/components/ShoppingLists"
@@ -74,8 +75,8 @@ export default function Lists() {
 	}
 
 	return (
-		<Box sx={{ flexGrow: 1 }}>
-			<AppBar position="static">
+		<>
+			<AppBar position="static" sx={{ flexGrow: 1 }}>
 				<Toolbar>
 					<IconButton
 						size="large"
@@ -95,6 +96,14 @@ export default function Lists() {
 							{listName}
 						</Typography>
 					}
+					<IconButton
+						size="large"
+						color="inherit"
+						sx={{ mr: 2 }}
+						onClick={() => navigate("/profile")}
+					>
+						<PersonIcon />
+					</IconButton>
 				</Toolbar>
 			</AppBar>
 			{isOpen && 
@@ -115,6 +124,6 @@ export default function Lists() {
 					focusedList={focusedList}
 				/>
 			}
-		</Box>
+		</>
 	)
 }
