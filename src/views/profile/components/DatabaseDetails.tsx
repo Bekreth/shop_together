@@ -25,7 +25,7 @@ export default function DatabaseDetails() {
 				}
 			}}
 		>
-			<Card>
+			<Card color="green">
 				<Typography variant="h4" m={2}>
 					Database Details
 				</Typography>
