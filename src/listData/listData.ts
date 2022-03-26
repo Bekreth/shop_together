@@ -1,16 +1,12 @@
-import {v4 as uuidv4} from "uuid"
+import { v4 as uuidv4 } from "uuid"
+import { StorageMetadata } from "utils/pouchTypes"
+
 
 export interface ListData extends StorageMetadata, ListHeader, Items {}
 
 export enum ListType {
     SHOPPING = "SHOPPING",
 } 
-
-export interface StorageMetadata {
-  _id: string
-  _rev?: string
-  _deleted?: boolean
-}
 
 export interface ListHeader {
   name: string

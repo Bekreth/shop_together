@@ -1,4 +1,4 @@
-import { StorageMetadata } from "listData"
+import { StorageMetadata } from "utils/pouchTypes"
 
 type LookupToResolution<T extends StorageMetadata> = (lookups: ConflictLookup[]) => Promise<ConflictResolution<T>>[]
 type PromiseReducer<T extends StorageMetadata> = (previous: Promise<ConflictResolution<T>>, current: Promise<ConflictResolution<T>>) => Promise<ConflictResolution<T>>

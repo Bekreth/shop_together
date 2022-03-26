@@ -1,9 +1,10 @@
 import PouchDB from "pouchdb"
 
-import { ListData, StorageMetadata } from "listData"
+import { ListData } from "listData"
 import { ConflictLookup, ConflictResolver } from "./conflictResolution"
 import { shoppingListResolver } from "./conflictResolution/shoppingList"
-// import { get_view, View } from "listStorage";
+
+import { StorageMetadata } from "utils/pouchTypes"
 
 export function buildShoppingResolver(db: PouchDB.Database): ConflictResolver<ListData> {
 	return {

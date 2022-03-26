@@ -1,4 +1,6 @@
-import { ListData, StorageMetadata } from "listData"
+import PouchDB from "pouchdb"
+
+import { ListData } from "listData"
 import { 
 	buildShoppingResolver, 
 	databaseName, 
@@ -11,8 +13,8 @@ import {
 	cleanup_timer,
 	View 
 } from "listStorage"
-import PouchDB from "pouchdb"
 import { ConflictEntry, ConflictResolver, resolveConflicts } from "./conflictResolution"
+import { StorageMetadata } from "utils/pouchTypes"
 
 export class ListStorage {
 	private db: PouchDB.Database
@@ -40,8 +42,8 @@ export class ListStorage {
 		}
 
 		// this.db.destroy()
-		PouchDB.sync(remoteDB, this.db, options)
-		setInterval(() => resolveConflicts(this.shoppingListResolver), cleanup_timer)
+		//PouchDB.sync(remoteDB, this.db, options)
+		//setInterval(() => resolveConflicts(this.shoppingListResolver), cleanup_timer)
 	}
 
 	async getListNames(): Promise<string[]> {
