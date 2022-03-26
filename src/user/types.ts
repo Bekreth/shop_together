@@ -5,26 +5,27 @@ export enum UserDBType {
 	DATABASE="DATABASE",
 }
 
-export const user_id = "user_data"
+export const userID = "user_data"
+export const userDB = "user_data"
 
 export interface User extends StorageMetadata {
 	username: string
 }
 
 export interface Server extends StorageMetadata {
-	name: string
+	serverName: string
 	address: string
-	user_name: string
+	username: string
 	port: number
 }
 
 export interface Database extends StorageMetadata {
-	server: string
+	serverName: string
 	name: string
 	list: string
 }
 
 export const initUser: User = {
-	_id: user_id,
+	_id: userID,
 	username: "unknown"
 }

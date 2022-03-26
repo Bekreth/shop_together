@@ -1,20 +1,37 @@
 import PouchDB from "pouchdb"
 
-import { doc_type } from "user/design_docs"
+import { 
+	docType,
+	docTypeID,
+} from "user/design_docs"
 
 import { 
 	User,
-	user_id,
+	Server,
+	userID,
+	userDB,
 } from "user"
-
-const userDB = "user_data"
 
 export class UserDatabase {
 	private db: PouchDB.Database
 	
 	constructor() {
 		console.log("Starting user database")
+		this.instantiateDatabase()
 		this.db = new PouchDB(userDB)
+	}
+
+	private instantiateDatabase() {
+		this.db = new PouchDB(userDB)
+		console.log(docType)
+		this.db.get(docTypeID)
+			.then(doc => console.log("get doc: ", doc))
+			.catch(err => {
+				// TODO:
+				//this.db.put(docType)
+				//	.then(doc => console.log("doc: ", doc))
+				//	.catch(err => console.log("err: ", err))
+			})
 		this.getUser()
 	}
 
@@ -27,10 +44,10 @@ export class UserDatabase {
 
 	async getUser(): Promise<User> {
 		try {
-			return await this.db.get<User>(user_id)
+			return await this.db.get<User>(userID)
 		} catch {
 			return this.updateUser({
-				_id: user_id,
+				_id: userID,
 				username: "unknown",
 			})
 		}
@@ -43,6 +60,10 @@ export class UserDatabase {
 		console.log("after", user)
 		return user
 	}
+
+	//async getServers(): Promise<Server> {
+	//	await this.db.query(get_view)
+	//}
 
 
 }

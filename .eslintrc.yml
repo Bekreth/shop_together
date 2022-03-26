@@ -15,6 +15,7 @@ plugins:
   - react
   - '@typescript-eslint'
 rules:
+  '@typescript-eslint/no-empty-interface': off
   indent:
     - error
     - tab

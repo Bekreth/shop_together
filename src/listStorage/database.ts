@@ -9,7 +9,7 @@ import {
 	port, 
 	scheme, 
 	username, 
-	get_view, 
+	getView, 
 	cleanup_timer,
 	View 
 } from "listStorage"
@@ -47,13 +47,13 @@ export class ListStorage {
 	}
 
 	async getListNames(): Promise<string[]> {
-		const message = await this.db.query(get_view(View.ListNames), {reduce: true})
+		const message = await this.db.query(getView(View.ListNames), {reduce: true})
 		const output: string[] = message.rows.map(row => row.value)[0]
 		return output ? output : []
 	}
 
 	async getListByName(name: string): Promise<ListData> {
-		const message = await this.db.query(get_view(View.ListByName), {key: name})
+		const message = await this.db.query(getView(View.ListByName), {key: name})
 		const output: ListData = message.rows[0].value
 		return output
 	}

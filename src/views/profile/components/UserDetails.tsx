@@ -15,9 +15,9 @@ import Select from "@mui/material/Select"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 
-
 import { User, UserDatabase, initUser } from "user"
 import { UserContext } from "index"
+
 
 export default function UserDetails() {
 	const userDB: UserDatabase = useContext(UserContext)
@@ -98,8 +98,8 @@ export default function UserDetails() {
 						</Grid>
 						<Grid item xs={5}>
 							<FormControl fullWidth>
-								<InputLabel>Default</InputLabel>
-								<Select>
+								<InputLabel>Color Scheme</InputLabel>
+								<Select label="Color Scheme">
 									<MenuItem>TBD</MenuItem>
 									<MenuItem>TBD</MenuItem>
 									<MenuItem>TBD</MenuItem>
