@@ -3,9 +3,13 @@ import { useState } from "react"
 
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
-import Typography from "@mui/material/Typography"
 import Modal from "@mui/material/Modal"
+import InputLabel from "@mui/material/InputLabel"
+import FormControl from "@mui/material/FormControl"
+import MenuItem from "@mui/material/MenuItem"
+import Select, { SelectChangeEvent } from "@mui/material/Select"
 import TextField from "@mui/material/TextField"
+import Typography from "@mui/material/Typography"
 
 import {ListData, makeList} from "listData"
 
@@ -30,7 +34,13 @@ export interface CreateListProps {
 
 export default function CreateList(props: CreateListProps) {
 	const {isOpen, close, navigate, appendList} = props
+
 	const [listName, setListName] = useState("")
+	const [serverName, setServerName] = useState("")
+
+	const handleServerSelector = (event: SelectChangeEvent) => {
+		setServerName(event.target.value as string)
+	}
 
 	const createList = () => {
 		appendList(makeList(listName))
@@ -50,18 +60,35 @@ export default function CreateList(props: CreateListProps) {
 				<Typography id="modal-modal-title" variant="h4">
 					New List
 				</Typography>
-				<TextField
-					id="listName" 
-					label="List Name"
-					variant="outlined"
-					onChange={event => {
-						setListName(event.target.value)
-					}}
-					onKeyDown={event => {
-						if (event.code === "Enter") createList()
-					}}
-					autoFocus
-				/>
+				<Box sx={{
+					display: "flex",
+					justifyContent: "space-between",
+				}}>
+					<TextField
+						id="listName" 
+						label="List Name"
+						variant="outlined"
+						onChange={event => {
+							setListName(event.target.value)
+						}}
+						onKeyDown={event => {
+							if (event.code === "Enter") createList()
+						}}
+						autoFocus
+					/>
+					<FormControl sx={{minWidth: 140}}>
+						<InputLabel id="server_selector_label">Server Name</InputLabel>
+						<Select 
+							id="serverSelector"
+							label="Server Name"
+							value={serverName}
+							onChange={handleServerSelector}
+						>
+							<MenuItem value="Server 1">Server 1</MenuItem>
+							<MenuItem value="Server 2">Server 2</MenuItem>
+						</Select>
+					</FormControl>
+				</Box>
 				<br/>
 				<Button
 					variant="contained"
