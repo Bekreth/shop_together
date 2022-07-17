@@ -74,13 +74,6 @@ export default function Profile() {
 
 	return (
 		<>
-			<AppBar position="static" sx={{ flexGrow: 1}}>
-				<Toolbar>
-					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-						Shop Together
-					</Typography>
-				</Toolbar>
-			</AppBar>
 			<UserDetails/>
 			{serverList.map(server => ServerDetails({...server, ...serverInteractions}))}
 			<DatabaseDetails/>

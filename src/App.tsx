@@ -1,20 +1,23 @@
 import React from "react"
+import {useState, useEffect, useContext} from "react"
+
 
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom"
-import BasicCard from "views/login/BasicCard"
+import HeadBar from "HeadBar"
+import Home from "views/home"
 import Lists from "views/lists"
 import Profile from "views/profile"
 import "./App.css"
 
 function App() {
+
 	return (
 		<Router>
+			<HeadBar/>
 			<Routes>
-				<Route path="/login" element={<BasicCard />} />
-				<Route path="/lists" element={<Lists />} />
+				<Route path="/home" element={<Home />} />
 				<Route path="/lists/:listName" element={<Lists />} />
 				<Route path="/profile" element={<Profile />} />
-				<Route path="/*" element={<Navigate to="/lists" />} />
 			</Routes>
 		</Router>
 	)

@@ -1,5 +1,10 @@
 import PouchDB from "pouchdb"
 
+import { 
+	listViews,
+	docTypeID,
+} from "./design_docs"
+
 import { ListData } from "listData"
 import { 
 	buildShoppingResolver, 
@@ -22,9 +27,16 @@ export class ListStorage {
 	private watching?: PouchDB.Core.Changes<ListData>
 
 	constructor() {
-		console.log("Started the db connect")
+		console.log("Starting the db connect")
 		this.db = new PouchDB(databaseName)
+		this.db.get(docTypeID)
+			.then(success => console.log(`Design doc ${docTypeID} already exists`))
+			.catch(err => {
+				console.log(`Design doc ${docTypeID} doesnt exists.  Adding it.`)
+				this.db.put(listViews)
+			})
 		this.shoppingListResolver = buildShoppingResolver(this.db)
+		/*
 		const remote = `${scheme}://${host}:${port}/${databaseName}`
 		const remoteDB = new PouchDB(remote, {
 			skip_setup: true,
@@ -33,13 +45,16 @@ export class ListStorage {
 				password: password,
 			}
 		})
+	 	*/
 
+		/*
 		const options = {
 			live: true,
 			retry: true,
 			continuous: true,
 			auto_compaction: true
 		}
+	 	*/
 
 		// this.db.destroy()
 		//PouchDB.sync(remoteDB, this.db, options)

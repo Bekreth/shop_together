@@ -3,7 +3,7 @@ import PouchDB from "pouchdb"
 import { 
 	docType,
 	docTypeID,
-} from "user/design_docs"
+} from "./design_docs"
 
 import { 
 	User,
@@ -23,7 +23,6 @@ export class UserDatabase {
 
 	private instantiateDatabase() {
 		this.db = new PouchDB(userDB)
-		console.log(docType)
 		this.db.get(docTypeID)
 			.then(doc => console.log("get doc: ", doc))
 			.catch(err => {
@@ -36,7 +35,6 @@ export class UserDatabase {
 	}
 
 	purgeUserDatabase() {
-		console.log("Purging and rebuilding database")
 		this.db.destroy()
 		this.db = new PouchDB(userDB)
 		this.getUser()
@@ -54,10 +52,8 @@ export class UserDatabase {
 	}
 
 	async updateUser(user: User): Promise<User> {
-		console.log("before", user)
 		const putObject = await this.db.put(user)
 		user._rev = putObject.rev
-		console.log("after", user)
 		return user
 	}
 
