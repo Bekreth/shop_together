@@ -73,12 +73,13 @@ export default function HeadBar() {
 					>
 						<MenuIcon />
 					</IconButton>
-					<Button variant="text" 
+					<Button 
+						variant="text" 
 						onClick={() => navigate("/home")}
 						sx={{ flexGrow: 1 }}
 						disableRipple
 					>
-						<Typography variant="h6" component="div">
+						<Typography variant="h6" component="div" sx={{ color: "white" }}>
 							Shop Together
 						</Typography>
 					</Button>

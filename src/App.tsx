@@ -14,6 +14,7 @@ function App() {
 	return (
 		<Router>
 			<HeadBar/>
+			<br/>
 			<Routes>
 				<Route path="/home" element={<Home />} />
 				<Route path="/lists/:listName" element={<Lists />} />

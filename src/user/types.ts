@@ -15,6 +15,7 @@ export interface User extends StorageMetadata {
 export interface Server extends StorageMetadata {
 	serverName: string
 	address: string
+	password: string
 	username: string
 	port: number
 }
@@ -22,7 +23,6 @@ export interface Server extends StorageMetadata {
 export interface Database extends StorageMetadata {
 	serverName: string
 	name: string
-	list: string
 }
 
 export const initUser: User = {

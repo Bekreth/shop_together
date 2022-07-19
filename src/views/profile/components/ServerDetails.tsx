@@ -2,6 +2,7 @@ import React from "react"
 import {useState, useEffect, useContext} from "react"
 
 import Box from "@mui/material/Box"
+import ButtonGroup from "@mui/material/ButtonGroup"
 import Button from "@mui/material/Button"
 import Card from "@mui/material/Card"
 import CardActions from "@mui/material/CardActions"
@@ -23,6 +24,7 @@ import { UserContext } from "index"
 
 export interface ServerDetailsProps extends Server {
 	editing: boolean,
+	deleteServer: (id: string) => void
 	editServer: (id: string) => void
 	confirmEditServer: (serverUpdates: Server) => void
 	cancelEditServer: () => void
@@ -33,10 +35,12 @@ export default function ServerDetails(props: ServerDetailsProps) {
 		_id,
 		serverName,
 		address,
+		password,
 		username,
 		port,
 		editing,
 		editServer,
+		deleteServer,
 		confirmEditServer,
 		cancelEditServer
 	} = props
@@ -45,6 +49,7 @@ export default function ServerDetails(props: ServerDetailsProps) {
 		_id: _id,
 		serverName: serverName,
 		address: address,
+		password: password,
 		username: username,
 		port: port
 	}) 
@@ -55,6 +60,7 @@ export default function ServerDetails(props: ServerDetailsProps) {
 			_id: _id,
 			serverName: serverName,
 			address: address,
+			password: password,
 			username: username,
 			port: port
 		})
@@ -71,6 +77,13 @@ export default function ServerDetails(props: ServerDetailsProps) {
 		setServer({
 			...server,
 			address: event.target.value,
+		})
+	}
+
+	const updatePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setServer({
+			...server,
+			password: event.target.value,
 		})
 	}
 
@@ -141,6 +154,22 @@ export default function ServerDetails(props: ServerDetailsProps) {
 
 					<Grid item xs={6}>
 						<Typography variant="h6">
+							Password
+						</Typography>
+					</Grid>
+					<Grid item xs={5}>
+						<TextField 
+							label="Password" 
+							disabled={!editing}
+							variant="outlined"
+							type="password"
+							value={server.password}
+							onChange={updatePassword}
+						/>
+					</Grid>
+
+					<Grid item xs={6}>
+						<Typography variant="h6">
 							User Name
 						</Typography>
 					</Grid>
@@ -178,26 +207,34 @@ export default function ServerDetails(props: ServerDetailsProps) {
 				>
 					<Button
 						variant="contained"
+						disabled={editing}
 						onClick={() => editServer(_id)}
 					>
 						Edit
 					</Button>
-					{editing && 
-					<Button
-						variant="outlined"
-						color="error"
-						onClick={cancelEditing}
-					>
-						Cancel
-					</Button>
-					}
-					{editing && 
-					<Button
-						variant="outlined"
-						onClick={() => confirmEditServer(server)}
-					>
-						Confirm
-					</Button>
+					{editing &&
+					<ButtonGroup>
+						<Button
+							variant="outlined"
+							onClick={() => confirmEditServer(server)}
+						>
+							Confirm
+						</Button>
+						<Button
+							variant="outlined"
+							color="error"
+							onClick={cancelEditing}
+						>
+							Cancel
+						</Button>
+						<Button
+							variant="contained"
+							color="error"
+							onClick={() => deleteServer(_id)}
+						>
+							Delete
+						</Button>
+					</ButtonGroup>
 					}
 				</CardActions>
 			</Card>
