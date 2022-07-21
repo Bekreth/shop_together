@@ -18,42 +18,48 @@ import {
 	Database
 } from "user"
 
+import {
+	Editable
+} from "types"
+
 export interface DatabaseDetailsProps extends Database {
-	editing: boolean
 	serverList: string[]
 	deleteDatabase: (id: string) => void
-	editDatabase: (id: string) => void
 	confirmEditDatabase: (serverUpdates: Database) => void
-	cancelEditDatabase: () => void
 }
 
 export default function DatabaseDetails(props: DatabaseDetailsProps) {
 	const {
-		_fileType,
+		type,
 		_id,
 		serverName,
-		name,
-		editing,
+		databaseName,
 		serverList,
 		deleteDatabase,
-		editDatabase,
 		confirmEditDatabase,
-		cancelEditDatabase,
 	} = props
 
-	const [database, setDatabase] = useState({
-		_fileType: _fileType,
+	const [database, setDatabase] = useState<Database & Editable>({
 		_id: _id,
-		name: name,
+		type: type,
+		editing: true,
+		databaseName: databaseName,
 		serverName: serverName,
 	}) 
 
-	const cancelEditing = () => {
-		cancelEditDatabase()
+	const editDatabase = () => {
 		setDatabase({
-			_fileType: _fileType,
+			...database,
+			editing: true,
+		})
+	}
+
+	const cancelEditing = () => {
+		setDatabase({
 			_id: _id,
-			name: name,
+			editing: false,
+			type: type,
+			databaseName: databaseName,
 			serverName: serverName,
 		})
 	}
@@ -61,7 +67,7 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 	const updateDatabaseName = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setDatabase({
 			...database,
-			name: event.target.value,
+			databaseName: event.target.value,
 		})
 	}
 
@@ -101,9 +107,9 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 					<Grid item xs={5}>
 						<TextField 
 							label="Database Name" 
-							disabled={!editing}
+							disabled={!database.editing}
 							variant="outlined"
-							value={database.name}
+							value={database.databaseName}
 							onChange={updateDatabaseName}
 						/>
 					</Grid>
@@ -116,11 +122,11 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 					<Grid item xs={5}>
 						<FormControl 
 							fullWidth
-							disabled={!editing}
+							disabled={!database.editing}
 						>
 							<InputLabel>Server Name</InputLabel>
 							<Select 
-								value={database.serverName}
+								value={database.serverName ? database.serverName : "No Server"}
 								onChange={updateServerName}
 							>
 								{serverList.map(serverName => {
@@ -146,12 +152,12 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 				>
 					<Button
 						variant="contained"
-						disabled={editing}
-						onClick={() => editDatabase(_id)}
+						disabled={database.editing}
+						onClick={editDatabase}
 					>
 						Edit
 					</Button>
-					{editing &&
+					{database.editing &&
 					<ButtonGroup>
 						<Button
 							variant="outlined"

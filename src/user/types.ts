@@ -10,12 +10,12 @@ export const userID = "user_data"
 export const userDB = "user_data"
 
 export interface User extends StorageMetadata {
-	_fileType: string
+	type: string
 	username: string
 }
 
 export interface Server extends StorageMetadata {
-	_fileType: string
+	type: string
 	serverName: string
 	address: string
 	password: string
@@ -24,13 +24,13 @@ export interface Server extends StorageMetadata {
 }
 
 export interface Database extends StorageMetadata {
-	_fileType: string
-	serverName: string
-	name: string
+	type: string
+	serverName?: string
+	databaseName: string
 }
 
 export const initUser: User = {
-	_fileType: UserDBType.USER,
+	type: UserDBType.USER,
 	_id: userID,
 	username: "unknown"
 }

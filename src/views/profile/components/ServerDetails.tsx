@@ -14,41 +14,39 @@ import Select from "@mui/material/Select"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 
+import {
+	Editable
+} from "types"
 import { 
 	User, 
 	UserDatabase, 
 	initUser,
 	Server
 } from "user"
-import { UserContext } from "index"
+
 
 export interface ServerDetailsProps extends Server {
-	editing: boolean,
 	deleteServer: (id: string) => void
-	editServer: (id: string) => void
 	confirmEditServer: (serverUpdates: Server) => void
-	cancelEditServer: () => void
 }
 
 export default function ServerDetails(props: ServerDetailsProps) {
 	const {
-		_fileType,
+		type,
 		_id,
 		serverName,
 		address,
 		password,
 		username,
 		port,
-		editing,
-		editServer,
 		deleteServer,
 		confirmEditServer,
-		cancelEditServer
 	} = props
 
-	const [server, setServer] = useState({
-		_fileType: _fileType,
+	const [server, setServer] = useState<Server & Editable>({
 		_id: _id,
+		type: type,
+		editing: true,
 		serverName: serverName,
 		address: address,
 		password: password,
@@ -56,11 +54,18 @@ export default function ServerDetails(props: ServerDetailsProps) {
 		port: port
 	}) 
 
-	const cancelEditing = () => {
-		cancelEditServer()
+	const editServer = () => {
 		setServer({
-			_fileType: _fileType,
+			...server,
+			editing: true
+		})
+	}
+
+	const cancelEditing = () => {
+		setServer({
 			_id: _id,
+			type: type,
+			editing: false,
 			serverName: serverName,
 			address: address,
 			password: password,
@@ -133,7 +138,7 @@ export default function ServerDetails(props: ServerDetailsProps) {
 					<Grid item xs={5}>
 						<TextField 
 							label="Server Name" 
-							disabled={!editing}
+							disabled={!server.editing}
 							variant="outlined"
 							value={server.serverName}
 							onChange={updateServerName}
@@ -148,7 +153,7 @@ export default function ServerDetails(props: ServerDetailsProps) {
 					<Grid item xs={5}>
 						<TextField 
 							label="Address" 
-							disabled={!editing}
+							disabled={!server.editing}
 							variant="outlined"
 							value={server.address}
 							onChange={updateAddress}
@@ -163,7 +168,7 @@ export default function ServerDetails(props: ServerDetailsProps) {
 					<Grid item xs={5}>
 						<TextField 
 							label="Password" 
-							disabled={!editing}
+							disabled={!server.editing}
 							variant="outlined"
 							type="password"
 							value={server.password}
@@ -179,7 +184,7 @@ export default function ServerDetails(props: ServerDetailsProps) {
 					<Grid item xs={5}>
 						<TextField 
 							label="User Name" 
-							disabled={!editing}
+							disabled={!server.editing}
 							variant="outlined"
 							value={server.username}
 							onChange={updateUsername}
@@ -194,7 +199,7 @@ export default function ServerDetails(props: ServerDetailsProps) {
 					<Grid item xs={5}>
 						<TextField 
 							label="Port" 
-							disabled={!editing}
+							disabled={!server.editing}
 							variant="outlined"
 							value={server.port}
 							onChange={updatePort}
@@ -210,12 +215,12 @@ export default function ServerDetails(props: ServerDetailsProps) {
 				>
 					<Button
 						variant="contained"
-						disabled={editing}
-						onClick={() => editServer(_id)}
+						disabled={server.editing}
+						onClick={editServer}
 					>
 						Edit
 					</Button>
-					{editing &&
+					{server.editing &&
 					<ButtonGroup>
 						<Button
 							variant="outlined"

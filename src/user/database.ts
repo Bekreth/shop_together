@@ -1,11 +1,15 @@
-import PouchDB from "pouchdb"
+import PouchDB  from "pouchdb"
 
 import { 
-	docType,
-	docTypeID,
+	designDocPath,
+	designDocName,
+	designDoc,
+	getView,
+	View,
 } from "./design_docs"
 
 import { 
+	Database,
 	User,
 	UserDBType,
 	Server,
@@ -13,24 +17,25 @@ import {
 	userDB,
 } from "user"
 
+import { StorageMetadata } from "utils/pouchTypes"
+
 export class UserDatabase {
 	private db: PouchDB.Database
 	
 	constructor() {
 		console.log("Starting user database")
-		this.instantiateDatabase()
 		this.db = new PouchDB(userDB)
+		this.instantiateDatabase()
 	}
 
 	private instantiateDatabase() {
-		this.db = new PouchDB(userDB)
-		this.db.get(docTypeID)
-			.then(doc => console.log("get doc: ", doc))
+		this.db.get(designDocPath)
+			.then(success => console.log(`Design doc ${designDocPath} already exists`))
 			.catch(err => {
-				// TODO:
-				//this.db.put(docType)
-				//	.then(doc => console.log("doc: ", doc))
-				//	.catch(err => console.log("err: ", err))
+				console.log(`Design doc ${designDocPath} doesn't exist. Adding it.`)
+				this.db.put(designDoc)
+					.then(success => console.log(`Design doc ${designDocPath} added`))
+					.catch(err2 => console.error(`Failed to put design doc ${designDocPath}:${err2}`))
 			})
 		this.getUser()
 	}
@@ -38,15 +43,16 @@ export class UserDatabase {
 	purgeUserDatabase() {
 		this.db.destroy()
 		this.db = new PouchDB(userDB)
-		this.getUser()
+		this.instantiateDatabase()
 	}
 
+	// User
 	async getUser(): Promise<User> {
 		try {
 			return await this.db.get<User>(userID)
 		} catch {
 			return this.updateUser({
-				_fileType: UserDBType.USER,
+				type: UserDBType.USER,
 				_id: userID,
 				username: "unknown",
 			})
@@ -59,9 +65,33 @@ export class UserDatabase {
 		return user
 	}
 
-	//async getServers(): Promise<Server> {
-	//	await this.db.query(get_view)
-	//}
+	// Databases
+	async createDatabase(database: Database): Promise<string> {
+		const putObject = await this.db.put(database)
+		return putObject.rev
+	}
 
+	async getDatabaseByName(databaseName: string): Promise<Database> {
+		const message = await this.db.query(getView(View.DatabaseName), {key: databaseName})
+		const output: Database = message.rows[0].value
+		return output
+	}
+
+	async getDatabases(): Promise<Database[]> {
+		const message = await this.db.query(getView(View.DocType), {key: UserDBType.DATABASE})
+		if (message.rows.length > 0) {
+			const output: Database[] = message.rows.map(row => row.value)[0]
+			return output
+		} else {
+			return []
+		}
+	}
+
+	async deleteDatabase(database: Database): Promise<PouchDB.Core.Response> {
+		if (database._rev) {
+			return await this.db.remove(database._id, database._rev)
+		}
+		return new Promise((_, reject) => reject(`No rev found in ${database._id}`))
+	}
 
 }
