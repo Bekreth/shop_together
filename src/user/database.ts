@@ -68,7 +68,14 @@ export class UserDatabase {
 	// Databases
 	async createDatabase(database: Database): Promise<string> {
 		const putObject = await this.db.put(database)
+		console.log("rev: ", putObject.rev)
 		return putObject.rev
+	}
+
+	async updateDatabase(database: Database): Promise<Database> {
+		const putObject = await this.db.put(database)
+		database._rev = putObject.rev
+		return database
 	}
 
 	async getDatabaseByName(databaseName: string): Promise<Database> {

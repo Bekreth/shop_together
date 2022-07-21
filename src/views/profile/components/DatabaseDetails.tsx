@@ -14,13 +14,8 @@ import Select, { SelectChangeEvent } from "@mui/material/Select"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 
-import {
-	Database
-} from "user"
-
-import {
-	Editable
-} from "types"
+import { Database } from "user"
+import { Editable } from "types"
 
 export interface DatabaseDetailsProps extends Database {
 	serverList: string[]
@@ -32,6 +27,7 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 	const {
 		type,
 		_id,
+		_rev,
 		serverName,
 		databaseName,
 		serverList,
@@ -41,6 +37,7 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 
 	const [database, setDatabase] = useState<Database & Editable>({
 		_id: _id,
+		_rev: _rev,
 		type: type,
 		editing: true,
 		databaseName: databaseName,

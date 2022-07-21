@@ -66,41 +66,20 @@ export default function Profile() {
 				type: UserDBType.DATABASE,
 				databaseName: "Unnamed",
 			})
-			setRerender(rerender + 1)
+				.then(success => setRerender(rerender + 1))
+				.catch(console.error)
 		},
 		deleteDatabase: (id: string) => {
 			userDB.deleteDatabase(databaseList.filter(database => database._id == id)[0])
 				.then(success => setRerender(rerender + 1))
 				.catch(console.error)
 		},
-		editDatabase: (id: string) => {
-			const updatedList = databaseList.map(database => {
-				const output = database
-				//output.editing = database._id == id TODO
-				return output
-			})
-			setDatabaseList(updatedList)
-		},
-		confirmEditDatabase: (databaseUpdates: Database) => {
-			const updatedList = databaseList.map(database => {
-				return database._id != databaseUpdates._id ? 
-					database :
-					{
-						...database,
-						...databaseUpdates,
-						//editing: false, TODO
-					}
-			})
-			setDatabaseList(updatedList)
-		},
-		cancelEditDatabase: () => {
-			const updatedList = databaseList.map(database => {
-				const output = database
-				//output.editing = false TODO
-				return output
-			})
-			setDatabaseList(updatedList)
-		}
+		confirmEditDatabase: (database: Database) => {
+			console.log("confirming! ", database)
+			userDB.updateDatabase(database)
+				.then(success => setRerender(rerender + 1))
+				.catch(console.error)
+		} 
 	}
 
 	const serverInteractions = {
