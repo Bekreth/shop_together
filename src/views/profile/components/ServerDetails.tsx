@@ -32,6 +32,7 @@ export interface ServerDetailsProps extends Server {
 
 export default function ServerDetails(props: ServerDetailsProps) {
 	const {
+		_fileType,
 		_id,
 		serverName,
 		address,
@@ -46,6 +47,7 @@ export default function ServerDetails(props: ServerDetailsProps) {
 	} = props
 
 	const [server, setServer] = useState({
+		_fileType: _fileType,
 		_id: _id,
 		serverName: serverName,
 		address: address,
@@ -57,6 +59,7 @@ export default function ServerDetails(props: ServerDetailsProps) {
 	const cancelEditing = () => {
 		cancelEditServer()
 		setServer({
+			_fileType: _fileType,
 			_id: _id,
 			serverName: serverName,
 			address: address,

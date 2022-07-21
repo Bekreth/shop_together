@@ -10,7 +10,7 @@ import FormControl from "@mui/material/FormControl"
 import Grid from "@mui/material/Grid"
 import InputLabel from "@mui/material/InputLabel"
 import MenuItem from "@mui/material/MenuItem"
-import Select from "@mui/material/Select"
+import Select, { SelectChangeEvent } from "@mui/material/Select"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 
@@ -19,7 +19,8 @@ import {
 } from "user"
 
 export interface DatabaseDetailsProps extends Database {
-	editing: boolean,
+	editing: boolean
+	serverList: string[]
 	deleteDatabase: (id: string) => void
 	editDatabase: (id: string) => void
 	confirmEditDatabase: (serverUpdates: Database) => void
@@ -28,10 +29,12 @@ export interface DatabaseDetailsProps extends Database {
 
 export default function DatabaseDetails(props: DatabaseDetailsProps) {
 	const {
+		_fileType,
 		_id,
 		serverName,
 		name,
 		editing,
+		serverList,
 		deleteDatabase,
 		editDatabase,
 		confirmEditDatabase,
@@ -39,6 +42,7 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 	} = props
 
 	const [database, setDatabase] = useState({
+		_fileType: _fileType,
 		_id: _id,
 		name: name,
 		serverName: serverName,
@@ -47,9 +51,24 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 	const cancelEditing = () => {
 		cancelEditDatabase()
 		setDatabase({
+			_fileType: _fileType,
 			_id: _id,
 			name: name,
 			serverName: serverName,
+		})
+	}
+
+	const updateDatabaseName = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setDatabase({
+			...database,
+			name: event.target.value,
+		})
+	}
+
+	const updateServerName = (event: SelectChangeEvent<string>) => {
+		setDatabase({
+			...database,
+			serverName: event.target.value,
 		})
 	}
 
@@ -76,22 +95,6 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 				>
 					<Grid item xs={6}>
 						<Typography variant="h6">
-							Server Name
-						</Typography>
-					</Grid>
-					<Grid item xs={5}>
-						<FormControl fullWidth>
-							<InputLabel>Default</InputLabel>
-							<Select>
-								<MenuItem>TBD</MenuItem>
-								<MenuItem>TBD</MenuItem>
-								<MenuItem>TBD</MenuItem>
-							</Select>
-						</FormControl>
-					</Grid>
-
-					<Grid item xs={6}>
-						<Typography variant="h6">
 							Database Name
 						</Typography>
 					</Grid>
@@ -100,10 +103,39 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 							label="Database Name" 
 							disabled={!editing}
 							variant="outlined"
-							value={name}
+							value={database.name}
+							onChange={updateDatabaseName}
 						/>
 					</Grid>
 
+					<Grid item xs={6}>
+						<Typography variant="h6">
+							Server Name
+						</Typography>
+					</Grid>
+					<Grid item xs={5}>
+						<FormControl 
+							fullWidth
+							disabled={!editing}
+						>
+							<InputLabel>Server Name</InputLabel>
+							<Select 
+								value={database.serverName}
+								onChange={updateServerName}
+							>
+								{serverList.map(serverName => {
+									return (
+										<MenuItem 
+											key={serverName} 
+											value={serverName}
+										>
+											{serverName}
+										</MenuItem>
+									)
+								})}
+							</Select>
+						</FormControl>
+					</Grid>
 				</Grid>
 				<CardActions
 					sx={{

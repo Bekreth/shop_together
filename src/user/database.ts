@@ -7,6 +7,7 @@ import {
 
 import { 
 	User,
+	UserDBType,
 	Server,
 	userID,
 	userDB,
@@ -45,6 +46,7 @@ export class UserDatabase {
 			return await this.db.get<User>(userID)
 		} catch {
 			return this.updateUser({
+				_fileType: UserDBType.USER,
 				_id: userID,
 				username: "unknown",
 			})

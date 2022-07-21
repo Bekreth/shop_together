@@ -18,16 +18,24 @@ import {
 	Database, 
 	User, 
 	UserDatabase, 
+	UserDBType,
 	Server,
 	initUser,
 } from "user"
 import { UserContext } from "index"
 
+const noServer = "No Server"
+
+interface Editable {
+	editing: boolean
+}
+
 export default function Profile() {
 	const userDB: UserDatabase = useContext(UserContext)
 
-	const [serverList, setServerList] = useState([
+	const [serverList, setServerList] = useState<(Server & Editable)[]>([
 		{
+			_fileType: UserDBType.SERVER,
 			_id: "some_id",
 			serverName: "Base Camp",
 			address: "localhost",
@@ -37,6 +45,7 @@ export default function Profile() {
 			editing: false,
 		},
 		{
+			_fileType: UserDBType.SERVER,
 			_id: "some_other_id",
 			serverName: "Backup system",
 			address: "some.location.com",
@@ -47,10 +56,11 @@ export default function Profile() {
 		}
 	])
 
-	const [databaseList, setDatabaseList] = useState([
+	const [databaseList, setDatabaseList] = useState<(Database & Editable)[]>([
 		{
-			_id: "db 1",
-			serverName: "Base Camp",
+			_fileType: UserDBType.DATABASE,
+			_id: uuidv4(),
+			serverName: noServer,
 			name: "OG DB",
 			editing: false,
 		}
@@ -58,10 +68,19 @@ export default function Profile() {
 
 	const databaseInteractions = {
 		newDatabase: () => {
-			console.log("New database")
+			const database = {
+				_fileType: UserDBType.DATABASE,
+				_id: uuidv4(),
+				name: "",
+				serverName: "No Server",
+				editing: true,
+			}
+			const updatedList = [database, ...databaseList]
+			setDatabaseList(updatedList)
 		},
 		deleteDatabase: (id: string) => {
-			console.log("Delete database")
+			const updatedList = databaseList.filter(database => database._id != id)
+			setDatabaseList(updatedList)
 		},
 		editDatabase: (id: string) => {
 			const updatedList = databaseList.map(database => {
@@ -71,8 +90,17 @@ export default function Profile() {
 			})
 			setDatabaseList(updatedList)
 		},
-		confirmEditDatabase: (serverUpdates: Database) => {
-			console.log("Confirm database")
+		confirmEditDatabase: (databaseUpdates: Database) => {
+			const updatedList = databaseList.map(database => {
+				return database._id != databaseUpdates._id ? 
+					database :
+					{
+						...database,
+						...databaseUpdates,
+						editing: false,
+					}
+			})
+			setDatabaseList(updatedList)
 		},
 		cancelEditDatabase: () => {
 			const updatedList = databaseList.map(database => {
@@ -87,6 +115,7 @@ export default function Profile() {
 	const serverInteractions = {
 		newServer: () => {
 			const server = {
+				_fileType: UserDBType.SERVER,
 				_id: uuidv4(),
 				serverName: "",
 				address: "",
@@ -150,6 +179,7 @@ export default function Profile() {
 		const updatedRenderList: JSX.Element[] = databaseList.map(database => {
 			return <DatabaseDetails
 				key={database._id}
+				serverList={[noServer, ...serverList.map(server => server.serverName)]}
 				{...database}
 				{...databaseInteractions}
 			/>
