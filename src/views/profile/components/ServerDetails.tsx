@@ -32,8 +32,9 @@ export interface ServerDetailsProps extends Server {
 
 export default function ServerDetails(props: ServerDetailsProps) {
 	const {
-		type,
 		_id,
+		_rev,
+		type,
 		serverName,
 		address,
 		password,
@@ -45,8 +46,9 @@ export default function ServerDetails(props: ServerDetailsProps) {
 
 	const [server, setServer] = useState<Server & Editable>({
 		_id: _id,
+		_rev: _rev,
 		type: type,
-		editing: true,
+		editing: false,
 		serverName: serverName,
 		address: address,
 		password: password,
@@ -61,9 +63,18 @@ export default function ServerDetails(props: ServerDetailsProps) {
 		})
 	}
 
+	const confirmEditing = () => {
+		confirmEditServer(server)
+		setServer({
+			...server,
+			editing: false
+		})
+	}
+
 	const cancelEditing = () => {
 		setServer({
 			_id: _id,
+			_rev: _rev,
 			type: type,
 			editing: false,
 			serverName: serverName,
@@ -162,6 +173,21 @@ export default function ServerDetails(props: ServerDetailsProps) {
 
 					<Grid item xs={6}>
 						<Typography variant="h6">
+							User Name
+						</Typography>
+					</Grid>
+					<Grid item xs={5}>
+						<TextField 
+							label="User Name" 
+							disabled={!server.editing}
+							variant="outlined"
+							value={server.username}
+							onChange={updateUsername}
+						/>
+					</Grid>
+
+					<Grid item xs={6}>
+						<Typography variant="h6">
 							Password
 						</Typography>
 					</Grid>
@@ -173,21 +199,6 @@ export default function ServerDetails(props: ServerDetailsProps) {
 							type="password"
 							value={server.password}
 							onChange={updatePassword}
-						/>
-					</Grid>
-
-					<Grid item xs={6}>
-						<Typography variant="h6">
-							User Name
-						</Typography>
-					</Grid>
-					<Grid item xs={5}>
-						<TextField 
-							label="User Name" 
-							disabled={!server.editing}
-							variant="outlined"
-							value={server.username}
-							onChange={updateUsername}
 						/>
 					</Grid>
 
@@ -224,7 +235,7 @@ export default function ServerDetails(props: ServerDetailsProps) {
 					<ButtonGroup>
 						<Button
 							variant="outlined"
-							onClick={() => confirmEditServer(server)}
+							onClick={confirmEditing}
 						>
 							Confirm
 						</Button>

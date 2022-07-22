@@ -1,5 +1,6 @@
 import React from "react"
 import {useState, useEffect, useContext} from "react"
+import {v4 as uuidv4} from "uuid"
 
 import AppBar from "@mui/material/AppBar"
 import Divider from "@mui/material/Divider"
@@ -11,8 +12,6 @@ import ServerDetails from "views/profile/components/ServerDetails"
 import NewDatabase from "views/profile/components/NewDatabase"
 import NewServer from "views/profile/components/NewServer"
 import UserDetails from "views/profile/components/UserDetails"
-
-import {v4 as uuidv4} from "uuid"
 
 import { 
 	Database, 
@@ -30,14 +29,20 @@ export default function Profile() {
 	const userDB: UserDatabase = useContext(UserContext)
 
 	const [databaseList, setDatabaseList] = useState<Database[]>([])
+	const [serverList, setServerList] = useState<Server[]>([])
 	const [rerender, setRerender] = useState(0)
 
 	useEffect(() => {
 		userDB.getDatabases()
 			.then(setDatabaseList)
 			.catch(console.error)
+
+		userDB.getServers()
+			.then(setServerList)
+			.catch(console.error)
 	}, [userDB, rerender])
 
+	/*
 	const [serverList, setServerList] = useState<Server[]>([
 		{
 			type: UserDBType.SERVER,
@@ -58,6 +63,7 @@ export default function Profile() {
 			port: 2345,
 		}
 	])
+	*/
 
 	const databaseInteractions = {
 		newDatabase: () => {
@@ -75,7 +81,6 @@ export default function Profile() {
 				.catch(console.error)
 		},
 		confirmEditDatabase: (database: Database) => {
-			console.log("confirming! ", database)
 			userDB.updateDatabase(database)
 				.then(success => setRerender(rerender + 1))
 				.catch(console.error)
@@ -84,49 +89,27 @@ export default function Profile() {
 
 	const serverInteractions = {
 		newServer: () => {
-			const server: Server = {
-				type: UserDBType.SERVER,
+			userDB.createServer({
 				_id: uuidv4(),
+				type: UserDBType.SERVER,
 				serverName: "",
 				address: "",
 				password: "",
 				username: "",
 				port: 0,
-			}
-			const updatedList = [server, ...serverList]
-			setServerList(updatedList)
+			})
+				.then(success => setRerender(rerender + 1))
+				.catch(console.error)
 		},
 		deleteServer: (id: string) => {
-			const updatedList = serverList.filter(server => server._id != id)
-			setServerList(updatedList)
+			userDB.deleteServer(serverList.filter(server => server._id == id)[0])
+				.then(success => setRerender(rerender + 1))
+				.catch(console.error)
 		},
-		editServer: (id: string) => {
-			const updatedList = serverList.map(server => {
-				const output = server
-				//output.editing = server._id == id TODO
-				return output
-			})
-			setServerList(updatedList)
-		},
-		confirmEditServer: (serverUpdates: Server) => {
-			const updatedList = serverList.map(server => {
-				return server._id != serverUpdates._id ? 
-					server : 
-					{
-						...server,
-						...serverUpdates,
-						editing: false,
-					}
-			})
-			setServerList(updatedList)
-		},
-		cancelEditServer: () => {
-			const updatedList = serverList.map(server => {
-				const output = server
-				//output.editing = false TODO
-				return output
-			})
-			setServerList(updatedList)
+		confirmEditServer: (server: Server) => {
+			userDB.updateServer(server)
+				.then(success => setRerender(rerender + 1))
+				.catch(console.error)
 		},
 	}
 
@@ -146,9 +129,19 @@ export default function Profile() {
 
 	useEffect(() => {
 		const updatedRenderList: JSX.Element[] = databaseList.map(database => {
+			const serverMapping: {[key: string]: string} = serverList
+				.map(server => {
+					return {[server._id]: server.serverName}
+				})
+				.reduce((accumulator, currentValue) => {
+					return {
+						...accumulator,
+						...currentValue
+					}
+				}, {})
 			return <DatabaseDetails
 				key={database._id}
-				serverList={[noServer, ...serverList.map(server => server.serverName)]}
+				serverMapping={serverMapping}
 				{...database}
 				{...databaseInteractions}
 			/>

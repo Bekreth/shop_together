@@ -25,7 +25,7 @@ export interface Server extends StorageMetadata {
 
 export interface Database extends StorageMetadata {
 	type: string
-	serverName?: string
+	serverID?: string
 	databaseName: string
 }
 

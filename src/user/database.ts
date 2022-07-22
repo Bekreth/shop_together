@@ -68,7 +68,6 @@ export class UserDatabase {
 	// Databases
 	async createDatabase(database: Database): Promise<string> {
 		const putObject = await this.db.put(database)
-		console.log("rev: ", putObject.rev)
 		return putObject.rev
 	}
 
@@ -99,6 +98,41 @@ export class UserDatabase {
 			return await this.db.remove(database._id, database._rev)
 		}
 		return new Promise((_, reject) => reject(`No rev found in ${database._id}`))
+	}
+
+	// Servers
+	async createServer(server: Server): Promise<string> {
+		const putObject = await this.db.put(server)
+		return putObject.rev
+	}
+
+	async updateServer(server: Server): Promise<Server> {
+		const putObject = await this.db.put(server)
+		server._rev = putObject.rev
+		return server
+	}
+
+	async getServers(): Promise<Server[]> {
+		const message = await this.db.query(getView(View.DocType), {key: UserDBType.SERVER})
+		if (message.rows.length > 0) {
+			const output: Server[] = message.rows.map(row => row.value)[0]
+			return output
+		} else {
+			return []
+		}
+	}
+
+	async getServerNames(): Promise<string[]> {
+		const message = await this.db.query(getView(View.ServerName), {reduce: true})
+		const output: string[] = message.rows.map(row => row.value)[0]
+		return output
+	}
+
+	async deleteServer(server: Server): Promise<PouchDB.Core.Response> {
+		if (server._rev) {
+			return await this.db.remove(server._id, server._rev)
+		}
+		return new Promise((_, reject) => reject(`No rev found in ${server._id}`))
 	}
 
 }

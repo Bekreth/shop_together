@@ -19,6 +19,7 @@ function App() {
 				<Route path="/home" element={<Home />} />
 				<Route path="/lists/:listName" element={<Lists />} />
 				<Route path="/profile" element={<Profile />} />
+				<Route path="/*" element={<Navigate to="/home"/>} />
 			</Routes>
 		</Router>
 	)

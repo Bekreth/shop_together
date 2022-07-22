@@ -18,19 +18,19 @@ import { Database } from "user"
 import { Editable } from "types"
 
 export interface DatabaseDetailsProps extends Database {
-	serverList: string[]
+	serverMapping: {[key: string]: string}
 	deleteDatabase: (id: string) => void
 	confirmEditDatabase: (serverUpdates: Database) => void
 }
 
 export default function DatabaseDetails(props: DatabaseDetailsProps) {
 	const {
-		type,
 		_id,
 		_rev,
-		serverName,
+		type,
+		serverID,
 		databaseName,
-		serverList,
+		serverMapping,
 		deleteDatabase,
 		confirmEditDatabase,
 	} = props
@@ -39,9 +39,9 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 		_id: _id,
 		_rev: _rev,
 		type: type,
-		editing: true,
+		editing: false,
 		databaseName: databaseName,
-		serverName: serverName,
+		serverID: serverID,
 	}) 
 
 	const editDatabase = () => {
@@ -51,13 +51,22 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 		})
 	}
 
+	const confirmEditing = () => {
+		confirmEditDatabase(database)
+		setDatabase({
+			...database,
+			editing: false,
+		})
+	}
+
 	const cancelEditing = () => {
 		setDatabase({
 			_id: _id,
+			_rev: _rev,
 			editing: false,
 			type: type,
 			databaseName: databaseName,
-			serverName: serverName,
+			serverID: serverID,
 		})
 	}
 
@@ -71,7 +80,7 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 	const updateServerName = (event: SelectChangeEvent<string>) => {
 		setDatabase({
 			...database,
-			serverName: event.target.value,
+			serverID: event.target.value,
 		})
 	}
 
@@ -123,16 +132,22 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 						>
 							<InputLabel>Server Name</InputLabel>
 							<Select 
-								value={database.serverName ? database.serverName : "No Server"}
+								value={database.serverID ? database.serverID : "00000"}
 								onChange={updateServerName}
 							>
-								{serverList.map(serverName => {
+								<MenuItem
+									key="00000"
+									value="00000"
+								>
+									No Server
+								</MenuItem>
+								{Object.entries(serverMapping).map(serverData => {
 									return (
-										<MenuItem 
-											key={serverName} 
-											value={serverName}
+										<MenuItem
+											key={serverData[0]}
+											value={serverData[0]}
 										>
-											{serverName}
+											{serverData[1]}
 										</MenuItem>
 									)
 								})}
@@ -158,7 +173,7 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 					<ButtonGroup>
 						<Button
 							variant="outlined"
-							onClick={() => confirmEditDatabase(database)}
+							onClick={confirmEditing}
 						>
 							Confirm
 						</Button>
