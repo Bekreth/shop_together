@@ -2,7 +2,6 @@ import PouchDB  from "pouchdb"
 
 import { 
 	designDocPath,
-	designDocName,
 	designDoc,
 	getView,
 	View,
@@ -16,8 +15,6 @@ import {
 	userID,
 	userDB,
 } from "user"
-
-import { StorageMetadata } from "utils/pouchTypes"
 
 export class UserDatabase {
 	private db: PouchDB.Database

@@ -1,11 +1,8 @@
 import React from "react"
-import {useState, useEffect, useContext} from "react"
+import { useContext, useEffect, useState } from "react"
 import {v4 as uuidv4} from "uuid"
 
-import AppBar from "@mui/material/AppBar"
 import Divider from "@mui/material/Divider"
-import Toolbar from "@mui/material/Toolbar"
-import Typography from "@mui/material/Typography"
 
 import DatabaseDetails from "views/profile/components/DatabaseDetails"
 import ServerDetails from "views/profile/components/ServerDetails"
@@ -15,15 +12,11 @@ import UserDetails from "views/profile/components/UserDetails"
 
 import { 
 	Database, 
-	User, 
 	UserDatabase, 
 	UserDBType,
 	Server,
-	initUser,
 } from "user"
 import { UserContext } from "index"
-
-const noServer = "No Server"
 
 export default function Profile() {
 	const userDB: UserDatabase = useContext(UserContext)
@@ -42,29 +35,6 @@ export default function Profile() {
 			.catch(console.error)
 	}, [userDB, rerender])
 
-	/*
-	const [serverList, setServerList] = useState<Server[]>([
-		{
-			type: UserDBType.SERVER,
-			_id: "some_id",
-			serverName: "Base Camp",
-			address: "localhost",
-			password: "password",
-			username: "Billy",
-			port: 1234,
-		},
-		{
-			type: UserDBType.SERVER,
-			_id: "some_other_id",
-			serverName: "Backup system",
-			address: "some.location.com",
-			password: "password",
-			username: "Billy.J",
-			port: 2345,
-		}
-	])
-	*/
-
 	const databaseInteractions = {
 		newDatabase: () => {
 			userDB.createDatabase({
@@ -72,17 +42,17 @@ export default function Profile() {
 				type: UserDBType.DATABASE,
 				databaseName: "Unnamed",
 			})
-				.then(success => setRerender(rerender + 1))
+				.then(() => setRerender(rerender + 1))
 				.catch(console.error)
 		},
 		deleteDatabase: (id: string) => {
 			userDB.deleteDatabase(databaseList.filter(database => database._id == id)[0])
-				.then(success => setRerender(rerender + 1))
+				.then(() => setRerender(rerender + 1))
 				.catch(console.error)
 		},
 		confirmEditDatabase: (database: Database) => {
 			userDB.updateDatabase(database)
-				.then(success => setRerender(rerender + 1))
+				.then(() => setRerender(rerender + 1))
 				.catch(console.error)
 		} 
 	}
@@ -98,17 +68,17 @@ export default function Profile() {
 				username: "",
 				port: 0,
 			})
-				.then(success => setRerender(rerender + 1))
+				.then(() => setRerender(rerender + 1))
 				.catch(console.error)
 		},
 		deleteServer: (id: string) => {
 			userDB.deleteServer(serverList.filter(server => server._id == id)[0])
-				.then(success => setRerender(rerender + 1))
+				.then(() => setRerender(rerender + 1))
 				.catch(console.error)
 		},
 		confirmEditServer: (server: Server) => {
 			userDB.updateServer(server)
-				.then(success => setRerender(rerender + 1))
+				.then(() => setRerender(rerender + 1))
 				.catch(console.error)
 		},
 	}

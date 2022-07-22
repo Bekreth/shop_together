@@ -1,9 +1,11 @@
 export const designDocName = "userData"
 export const designDocPath = `_design/${designDocName}`
 
+/*
 const emit: (key: any, value: any) => void = (key: any, value: any) => {
 	console.log("You should never see this")
 }
+*/
 
 export const designDoc = {
 	_id: designDocPath,

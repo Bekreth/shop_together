@@ -1,6 +1,4 @@
 import React from "react"
-import {useState, useEffect, useContext} from "react"
-
 
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom"
 import HeadBar from "HeadBar"

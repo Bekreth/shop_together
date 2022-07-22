@@ -11,9 +11,10 @@ import PersonIcon from "@mui/icons-material/Person"
 import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
 
-import {DatabaseContext} from "index"
 import { ListData, ListType } from "listData"
 import ShoppingLists from "views/lists/components/ShoppingLists"
+import { Database, UserDatabase } from "user"
+import { DatabaseContext, UserContext } from "index"
 
 
 //TODO: need a better setup than this
@@ -32,15 +33,23 @@ export default function HeadBar() {
 	const navigate = useNavigate()
 
 	const dbClient = useContext(DatabaseContext)
+	const userDB: UserDatabase = useContext(UserContext)
 
 	const [isOpen, setOpen] = useState(false)
 	const [availableLists, setAvailableLists] = useState(emptyListNames)
+	const [databaseList, setDatabaseList] = useState<Database[]>([])
 
 	useEffect(() => {
 		dbClient.getListNames()
 			.then(setAvailableLists)
 			.catch(console.error)
 	}, [dbClient, isOpen])
+
+	useEffect(() => {
+		userDB.getDatabases()
+			.then(setDatabaseList)
+			.catch(console.error)
+	}, [userDB])
 
 	const listAppender: (listData: ListData) => Promise<string> = (listData: ListData) => {
 		return dbClient.createList(listData)
@@ -100,6 +109,7 @@ export default function HeadBar() {
 					onClose={closeDrawer}
 				>
 					<ShoppingLists 
+						databaseList={databaseList}
 						listNames={availableLists}
 						closeDrawer={closeDrawer}
 						appendList={listAppender}

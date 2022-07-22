@@ -1,28 +1,17 @@
 import React from "react"
-import {useState, useEffect, useContext} from "react"
+import { useState } from "react"
 
 import Box from "@mui/material/Box"
 import ButtonGroup from "@mui/material/ButtonGroup"
 import Button from "@mui/material/Button"
 import Card from "@mui/material/Card"
 import CardActions from "@mui/material/CardActions"
-import FormControl from "@mui/material/FormControl"
 import Grid from "@mui/material/Grid"
-import InputLabel from "@mui/material/InputLabel"
-import MenuItem from "@mui/material/MenuItem"
-import Select from "@mui/material/Select"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 
-import {
-	Editable
-} from "types"
-import { 
-	User, 
-	UserDatabase, 
-	initUser,
-	Server
-} from "user"
+import { Editable } from "types"
+import { Server } from "user"
 
 
 export interface ServerDetailsProps extends Server {
