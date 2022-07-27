@@ -68,8 +68,7 @@ const DatabaseContainer = (props: {
 	const [expanded, setExpanded] = useState(true)
 	return (
 		<Accordion 
-			//expanded={expanded}
-			expanded={true}
+			expanded={expanded}
 			onClick={() => setExpanded(!expanded)}
 		>
 			<AccordionSummary>

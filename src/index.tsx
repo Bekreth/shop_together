@@ -5,21 +5,13 @@ import App from "./App"
 import reportWebVitals from "./reportWebVitals"
 import { createContext } from "react"
 import { ListStorage } from "listStorage"
+import { DatabaseManager } from "./listStorage/databaseManager"
 import { UserDatabase } from "user"
 
-const userDB = new UserDatabase()
-const dbClient = new ListStorage()
-
-export const UserContext = createContext(userDB)
-export const DatabaseContext = createContext(dbClient)
 
 ReactDOM.render(
 	<React.StrictMode>
-		<UserContext.Provider value={userDB}>
-			<DatabaseContext.Provider value={dbClient}>
-				<App />
-			</DatabaseContext.Provider>
-		</UserContext.Provider>
+		<App />
 	</React.StrictMode>,
 	document.getElementById("root")
 )

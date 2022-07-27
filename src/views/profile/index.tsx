@@ -16,7 +16,7 @@ import {
 	UserDBType,
 	Server,
 } from "user"
-import { UserContext } from "index"
+import { UserContext } from "App"
 
 export default function Profile() {
 	const userDB: UserDatabase = useContext(UserContext)

@@ -12,7 +12,7 @@ import ListItemText from "@mui/material/ListItemText"
 import ListSubheader from "@mui/material/ListSubheader"
 import Switch from "@mui/material/Switch"
 
-import { DatabaseContext } from "index"
+import { DatabaseContext } from "App"
 import { Item, ListData, PurchaseState } from "listData"
 import CreateItem from "views/lists/components/CreateItem"
 import EditItem from "views/lists/components/EditItem"

@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography"
 import { ListData, ListType } from "listData"
 import ShoppingLists from "views/lists/components/ShoppingLists"
 import { Database, UserDatabase } from "user"
-import { DatabaseContext, UserContext } from "index"
+import { DatabaseContext, DatabaseManagerContext, UserContext } from "./App"
 
 
 //TODO: need a better setup than this
@@ -33,7 +33,8 @@ export default function HeadBar() {
 	const navigate = useNavigate()
 
 	const dbClient = useContext(DatabaseContext)
-	const userDB: UserDatabase = useContext(UserContext)
+	const userDB = useContext(UserContext)
+	const dbManager = useContext(DatabaseManagerContext)
 
 	const [isOpen, setOpen] = useState(false)
 	const [availableLists, setAvailableLists] = useState(emptyListNames)
@@ -50,6 +51,10 @@ export default function HeadBar() {
 			.then(setDatabaseList)
 			.catch(console.error)
 	}, [userDB])
+
+	useEffect(() => {
+		console.log("heelo")
+	}, [databaseList])
 
 	const listAppender: (listData: ListData) => Promise<string> = (listData: ListData) => {
 		return dbClient.createList(listData)

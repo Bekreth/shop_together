@@ -1,39 +1,42 @@
 import PouchDB from "pouchdb"
 
-import { 
-	listViews,
-	docTypeID,
-} from "./design_docs"
-
 import { ListData } from "listData"
 import { 
 	buildShoppingResolver, 
-	databaseName, 
 	host, 
 	password, 
 	port, 
 	scheme, 
 	username, 
-	getView, 
 	cleanup_timer,
-	View 
 } from "listStorage"
-import { ConflictEntry, ConflictResolver, resolveConflicts } from "./conflictResolution"
 import { StorageMetadata } from "utils/pouchTypes"
+
+import { 
+	ConflictEntry,
+	ConflictResolver,
+	resolveConflicts
+} from "./conflictResolution"
+import { 
+	designDocPath,
+	designDoc,
+	getView, 
+	View,
+} from "./design_docs"
 
 export class ListStorage {
 	private db: PouchDB.Database
 	private shoppingListResolver: ConflictResolver<ListData>
 	private watching?: PouchDB.Core.Changes<ListData>
 
-	constructor() {
+	constructor(databaseName: string) {
 		console.log("Starting the db connect")
 		this.db = new PouchDB(databaseName)
-		this.db.get(docTypeID)
-			.then(success => console.log(`Design doc ${docTypeID} already exists`))
+		this.db.get(designDocPath)
+			.then(success => console.log(`Design doc ${designDocPath} already exists`))
 			.catch(err => {
-				console.log(`Design doc ${docTypeID} doesnt exists.  Adding it.`)
-				this.db.put(listViews)
+				console.log(`Design doc ${designDocPath} doesnt exists.  Adding it.`)
+				this.db.put(designDoc)
 			})
 		this.shoppingListResolver = buildShoppingResolver(this.db)
 		/*

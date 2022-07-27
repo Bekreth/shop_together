@@ -8,11 +8,4 @@ export const password = "password"
 
 export const cleanup_timer = 5_000
 export const designDoc = "listStore"
-export enum View {
-  ConflictingLists = "conflictingLists",
-  ListByName = "listByName",
-  ListNames = "listNames",
-}
-export const getView = (view: View) => {
-	return `${designDoc}/${view}`
-}
+

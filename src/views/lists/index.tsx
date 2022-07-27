@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 
 import ListContents from "views/lists/components/ListContents"
 import { ListData, ListType } from "listData"
-import { DatabaseContext } from "index"
+import { DatabaseContext } from "App"
 
 //TODO: need a better setup than this
 const emptyList: ListData = {

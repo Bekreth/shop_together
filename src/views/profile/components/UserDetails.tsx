@@ -16,7 +16,7 @@ import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 
 import { User, UserDatabase, initUser } from "user"
-import { UserContext } from "index"
+import { UserContext } from "App"
 
 
 export default function UserDetails() {
