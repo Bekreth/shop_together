@@ -83,7 +83,7 @@ export class UserDatabase {
 	async getDatabases(): Promise<Database[]> {
 		const message = await this.db.query(getView(View.DocType), {key: UserDBType.DATABASE})
 		if (message.rows.length > 0) {
-			const output: Database[] = message.rows.map(row => row.value)[0]
+			const output: Database[] = message.rows[0].value
 			return output
 		} else {
 			return []

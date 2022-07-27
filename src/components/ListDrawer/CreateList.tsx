@@ -3,15 +3,13 @@ import { useState } from "react"
 
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
-import Modal from "@mui/material/Modal"
 import InputLabel from "@mui/material/InputLabel"
 import FormControl from "@mui/material/FormControl"
+import Modal from "@mui/material/Modal"
 import MenuItem from "@mui/material/MenuItem"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
-
-import {ListData, makeList} from "listData"
 
 const style = {
 	position: "absolute" as const,
@@ -29,27 +27,16 @@ export interface CreateListProps {
 	isOpen: boolean
 	close: () => void
 	navigate: (newList: string) => void
-	appendList: (listData: ListData) => Promise<string>
 }
 
 export default function CreateList(props: CreateListProps) {
-	const {isOpen, close, navigate, appendList} = props
+	const {
+		isOpen,
+		close,
+		navigate,
+	} = props
 
 	const [listName, setListName] = useState("")
-	const [serverName, setServerName] = useState("")
-
-	const handleServerSelector = (event: SelectChangeEvent) => {
-		setServerName(event.target.value as string)
-	}
-
-	const createList = () => {
-		appendList(makeList(listName))
-			.then(rev => close())
-			.catch(error => (
-				console.error("failed to insert", error)
-			))
-		navigate(listName)
-	}
 
 	return (
 		<Modal
@@ -72,10 +59,11 @@ export default function CreateList(props: CreateListProps) {
 							setListName(event.target.value)
 						}}
 						onKeyDown={event => {
-							if (event.code === "Enter") createList()
+							if (event.code === "Enter") console.log("submit")//createList()
 						}}
 						autoFocus
 					/>
+					{/*
 					<FormControl sx={{minWidth: 140}}>
 						<InputLabel id="server_selector_label">Server Name</InputLabel>
 						<Select 
@@ -88,11 +76,13 @@ export default function CreateList(props: CreateListProps) {
 							<MenuItem value="Server 2">Server 2</MenuItem>
 						</Select>
 					</FormControl>
+					*/}
 				</Box>
 				<br/>
 				<Button
 					variant="contained"
-					onClick={createList}
+					//onClick={createList} TODO:
+					onClick={() => console.log("Clicked to make")}
 				>
 					Create
 				</Button>

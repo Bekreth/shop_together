@@ -1,13 +1,8 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import "./index.css"
-import App from "./App"
+import App from "App"
 import reportWebVitals from "./reportWebVitals"
-import { createContext } from "react"
-import { ListStorage } from "listStorage"
-import { DatabaseManager } from "./listStorage/databaseManager"
-import { UserDatabase } from "user"
-
 
 ReactDOM.render(
 	<React.StrictMode>

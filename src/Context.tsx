@@ -1,22 +1,25 @@
-import React, { createContext } from "react"
+import React, { createContext, useEffect } from "react"
 
-import { ListStorage } from "listStorage"
 import { DatabaseManager } from "./listStorage/databaseManager"
+import { ListStorage } from "./listStorage/database"
 import { UserDatabase } from "user"
 
-const userDB = new UserDatabase()
-const dbClient = new ListStorage("group_list")
-const dbManager = new DatabaseManager()
+const userDatabase = new UserDatabase()
+const databaseManager = new DatabaseManager()
 
-export const UserContext = createContext(userDB)
-export const DatabaseContext = createContext(dbClient)
-export const DatabaseManagerContext = createContext(dbManager)
+export const UserContext = createContext(userDatabase)
+export const DatabaseManagerContext = createContext(databaseManager)
 
-export default function Context(props: {}) {
+export default function Context(props: {children: React.ReactNode}) {
+	const {
+		children
+	} = props
+
 	return (
-		<UserContext.Provider value={userDB}>
-			<DatabaseContext.Provider value={dbClient}>
-			</DatabaseContext.Provider>
+		<UserContext.Provider value={userDatabase}>
+			<DatabaseManagerContext.Provider value={databaseManager}>
+				{children}
+			</DatabaseManagerContext.Provider>
 		</UserContext.Provider>
 	)
 }
