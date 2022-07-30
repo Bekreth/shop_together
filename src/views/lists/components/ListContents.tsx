@@ -27,13 +27,13 @@ const emptyItem: Item = {
 
 export interface ListContentsProps {
   focusedList: ListData,
-	//dbClient: ListStorage,
+	dbClient: ListStorage,
 }
 
 export default function ListContents(props: ListContentsProps) {
 	const {
 		focusedList,
-		//dbClient
+		dbClient
 	} = props
 
 	const [listContents, setListContents] = useState(focusedList)
@@ -44,11 +44,9 @@ export default function ListContents(props: ListContentsProps) {
 
 	useEffect(() => setListContents(focusedList), [focusedList])
 
-	/*
 	useEffect(() => {
 		dbClient.watchList(focusedList, setListContents)
 	}, [dbClient, focusedList])
-	*/
 
 	const toggleCart = (list: ListData, itemID: string) => {
 		const itemState = list.items[itemID].state 
@@ -58,11 +56,9 @@ export default function ListContents(props: ListContentsProps) {
 			list.items[itemID].state = PurchaseState.TO_BUY
 		}
 		list.items[itemID].updated = new Date()
-		/*
 		dbClient.updateList({...list})
 			.then(setListContents)
 			.catch(console.error)
-		*/
 	}
 
 	const purchaseItems = (list: ListData) => {
@@ -75,31 +71,25 @@ export default function ListContents(props: ListContentsProps) {
 				item.updated = new Date()
 				return item
 			})
-		/*
 		dbClient.updateList({...list})
 			.then(setListContents)
 			.catch(console.error)
-		*/
 	}
 
 	const returnToBuy = (list: ListData, itemID: string) => {
 		list.items[itemID].state = PurchaseState.TO_BUY
 		list.items[itemID].updated = new Date()
-		/*
 		dbClient.updateList({...list})
 			.then(setListContents)
 			.catch(console.error)
-		*/
 	}
 
 	const createItemAppender = (list: ListData) => {
 		return (item: Item) => {
 			list.items[item._id] = item
-			/*
 			dbClient.updateList({...list})
 				.then(setListContents)
 				.catch(console.error)
-			*/
 		}
 	}
 
@@ -109,20 +99,16 @@ export default function ListContents(props: ListContentsProps) {
 
 	const saveItemEdits = (itemID: string, item: Item) => {
 		listContents.items[itemID] = item
-		/*
 		dbClient.updateList({...listContents})
 			.then(setListContents)
 			.catch(console.error)
-		*/
 	}
 
 	const deleteItem = (item: Item) => {
 		delete listContents.items[item._id]
-		/*
 		dbClient.updateList({...listContents})
 			.then(setListContents)
 			.catch(console.error)
-		*/
 	}
 
 	const modifiableItems = {

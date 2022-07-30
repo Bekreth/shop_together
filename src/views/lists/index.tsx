@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 
 import ListContents from "views/lists/components/ListContents"
 import { ListData, ListType } from "listData"
-//import { DatabaseContext } from "App"
+import { DatabaseManagerContext } from "Context"
 
 //TODO: need a better setup than this
 const emptyList: ListData = {
@@ -16,14 +16,19 @@ const emptyList: ListData = {
 	items: {}
 }
 
-export default function Lists() {
-	const {listName} = useParams()
+export default function ShoppingList() {
+	const {
+		databaseName,
+		listName,
+	} = useParams()
+	console.log("landed in ", databaseName, listName)
 
-	//const dbClient = useContext(DatabaseContext)
+
+	const dbClient = useContext(DatabaseManagerContext)
+		.fetchListStorage(databaseName ? databaseName : "")
 
 	const [focusedList, setFocusedList] = useState<ListData>(emptyList)
 
-	/*
 	useEffect(() => {
 		if (listName != undefined) {
 			dbClient.getListByName(listName)
@@ -31,17 +36,16 @@ export default function Lists() {
 				.catch(console.error)
 		}
 	}, [dbClient, listName])
-	*/
 
+
+	// TODO: if db client is undefined, navigate home
 	return (
 		<>
 			{focusedList !== emptyList && 
-				<></>
-				/*
 				<ListContents
 					focusedList={focusedList}
+					dbClient={dbClient}
 				/>
-				*/
 			}
 		</>
 	)

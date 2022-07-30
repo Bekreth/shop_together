@@ -1,6 +1,5 @@
 import React from "react"
-import {useState, useEffect, useContext} from "react"
-import {useNavigate} from "react-router"
+import { useState, useEffect, useContext } from "react"
 
 import Divider from "@mui/material/Divider"
 import Drawer from "@mui/material/Drawer"
@@ -37,15 +36,21 @@ export default function ListDrawer(props: ListDrawerProps) {
 	const [renderedDatabaseList, setRenderedDatabaseList] = useState<JSX.Element[]>([])
 
 	useEffect(() => {
-		const updatedRenderList: JSX.Element[] = databaseList.map(database => {
-			return (
-				<DatabaseContainer
-					key={`database_${database._id}`}
-					database={database}
-					lists={["list 1", "list 2", "list 3"]}
-					closeDrawer={closeDrawer}
-				/>
-			)
+		const updatedRenderList: JSX.Element[] = []
+		databaseList.forEach(database => {
+			databaseManager.fetchListStorage(database.databaseName)
+				.getListNames()
+				.then(lists => {
+					updatedRenderList.push(
+						<DatabaseContainer
+							key={`database_${database._id}`}
+							database={database}
+							lists={lists}
+							closeDrawer={closeDrawer}
+						/>
+					)
+				})
+				.catch(console.error)
 		})
 		setRenderedDatabaseList(updatedRenderList)
 	}, [databaseList])

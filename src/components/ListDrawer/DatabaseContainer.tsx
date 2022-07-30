@@ -1,6 +1,7 @@
 import React from "react"
 
 import { useState } from "react"
+import { useNavigate } from "react-router"
 
 import Accordion from "@mui/material/Accordion"
 import AccordionDetails from "@mui/material/AccordionDetails"
@@ -22,6 +23,7 @@ export default function DatabaseContainer(props: DatabaseContainerProps) {
 		lists,
 		closeDrawer,
 	} = props
+	const navigate = useNavigate()
 
 	const [expanded, setExpanded] = useState(true)
 
@@ -41,7 +43,7 @@ export default function DatabaseContainer(props: DatabaseContainerProps) {
 								button
 								key={list}
 								onClick={() => {
-									console.log("TODO, List route")
+									navigate(`/database/${database.databaseName}/list/${list}`)
 									closeDrawer()
 								}}
 							>

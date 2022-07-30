@@ -7,6 +7,12 @@ import { UserDatabase } from "user"
 const userDatabase = new UserDatabase()
 const databaseManager = new DatabaseManager()
 
+userDatabase.getDatabases()
+	.then(dbs => {
+		databaseManager.addDatabases(dbs)
+	})
+	.catch(console.error)
+
 export const UserContext = createContext(userDatabase)
 export const DatabaseManagerContext = createContext(databaseManager)
 

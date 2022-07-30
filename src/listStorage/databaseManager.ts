@@ -1,21 +1,14 @@
-import PouchDB from "pouchdb"
-
 import { Database } from "user"
-
 import { ListStorage } from "./database"
 
 export class DatabaseManager {
 	private listDatabase: {[database: string]: ListStorage}
 
 	constructor() {
-		console.log("bingo")
 		this.listDatabase = {}
 	}
 
 	addDatabases(databases: Database[]) {
-		console.log("here")
-		console.log(this)
-		console.log("here")
 		for (const database of databases) {
 			if (this.listDatabase[database._id] == undefined) {
 				this.addDatabase(database)
@@ -24,10 +17,10 @@ export class DatabaseManager {
 	}
 
 	addDatabase(database: Database) {
-		console.log("TODO, db manager")
-		//this.listDatabase[database._id] = new ListStorage(database.databaseName)
+		this.listDatabase[database.databaseName] = new ListStorage(database.databaseName)
 	}
 
+	//TODO: Make this an Optional return
 	fetchListStorage(databaseName: string): ListStorage {
 		return this.listDatabase[databaseName]
 	}

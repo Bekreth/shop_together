@@ -1,5 +1,5 @@
 import React from "react"
-import { useEffect, useState, useContext } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router"
 
 import AppBar from "@mui/material/AppBar"
@@ -10,73 +10,12 @@ import PersonIcon from "@mui/icons-material/Person"
 import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
 
-import { ListData, ListType } from "listData"
-import { UserDatabase } from "user"
-import { DatabaseManagerContext, UserContext } from "Context"
 import ListDrawer from "components/ListDrawer"
-
-
-//TODO: need a better setup than this
-const emptyList: ListData = {
-	_id: "",
-	name: "",
-	type: ListType.SHOPPING,
-	created: new Date(),
-	updated: new Date(),
-	items: {}
-}
-
-const emptyListNames: string[] = []
 
 export default function HeadBar() {
 	const navigate = useNavigate()
 
-	const userDatabase = useContext(UserContext)
-	const databaseManager = useContext(DatabaseManagerContext)
-
-	/*
-	useEffect(() => {
-		userDatabase.getDatabases()
-			.then(databaseManager.addDatabases)
-			.catch(console.error)
-	}, [userDatabase, databaseManager])
-	*/
-
 	const [isOpen, setOpen] = useState(false)
-	//const [databaseList, setDatabaseList] = useState<Database[]>([])
-
-	/*
-	useEffect(() => {
-		dbClient.getListNames()
-			.then(setAvailableLists)
-			.catch(console.error)
-	}, [dbClient, isOpen])
-	*/
-
-	/*
-	useEffect(() => {
-		userDB.getDatabases()
-			.then(setDatabaseList)
-			.catch(console.error)
-	}, [userDB])
-	*/
-
-	/*
-	useEffect(() => {
-		console.log("heelo")
-	}, [databaseList])
-	*/
-
-	/*
-	const listAppender: (listData: ListData) => Promise<string> = (listData: ListData) => {
-		return dbClient.createList(listData)
-			.then(rev => {
-				vailableLists.push(listData.name)
-				setAvailableLists([ ...vailableLists ])
-				return rev
-			})
-	}
-	*/
 
 	const toggleDrawer = () => {
 		setOpen(!isOpen)

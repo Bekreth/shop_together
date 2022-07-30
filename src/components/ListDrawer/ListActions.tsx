@@ -1,8 +1,8 @@
 import React from "react"
-import { useState, useEffect, useContext } from "react"
+import { useState } from "react"
+import { useNavigate } from "react-router"
 
 import AddIcon from "@mui/icons-material/Add"
-import InboxIcon from "@mui/icons-material/Inbox"
 import SettingsIcon from "@mui/icons-material/Settings"
 
 import ListItem from "@mui/material/ListItem"
@@ -15,8 +15,13 @@ const createList = "Create List"
 const editList = "Edit List"
 
 export default function ListActions() {
+	const navigate = useNavigate()
 
 	const [isCreatingList, setCreatingList] = useState(false)
+
+	const navigateToList = (databaseName: string, listName: string) => {
+		navigate(`/database/${databaseName}/list/${listName}`)
+	}
 
 	return (
 		<>
@@ -39,7 +44,7 @@ export default function ListActions() {
 			<CreateList
 				isOpen={isCreatingList}
 				close={() => setCreatingList(false)}
-				navigate={(newList) => console.log(newList)}
+				navigate={navigateToList}
 			/>
 		</>
 	)
