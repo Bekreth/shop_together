@@ -1,15 +1,17 @@
 import PouchDB from "pouchdb"
 
-import { ListData } from "listData"
+import { ListData } from "./types"
 import { 
 	buildShoppingResolver, 
+} from "./resolvers"
+import {
 	host, 
 	password, 
 	port, 
 	scheme, 
 	username, 
 	cleanup_timer,
-} from "listStorage"
+} from "./constants"
 import { StorageMetadata } from "utils/pouchTypes"
 
 import { 
@@ -26,7 +28,7 @@ import {
 
 export class ListStorage {
 	private db: PouchDB.Database
-	//private shoppingListResolver: ConflictResolver<ListData>
+	private shoppingListResolver: ConflictResolver<ListData>
 	private watching?: PouchDB.Core.Changes<ListData>
 
 	constructor(databaseName: string) {
@@ -38,7 +40,7 @@ export class ListStorage {
 				console.log(`Design doc ${designDocPath} doesnt exists.  Adding it.`)
 				this.db.put(designDoc)
 			})
-		//this.shoppingListResolver = buildShoppingResolver(this.db)
+		this.shoppingListResolver = buildShoppingResolver(this.db)
 		/*
 		const remote = `${scheme}://${host}:${port}/${databaseName}`
 		const remoteDB = new PouchDB(remote, {

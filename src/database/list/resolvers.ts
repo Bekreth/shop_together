@@ -1,8 +1,7 @@
 import PouchDB from "pouchdb"
 
 import { designDocPath } from "./design_docs"
-
-import { ListData } from "listData"
+import { ListData } from "./types"
 import { ConflictLookup, ConflictResolver } from "./conflictResolution"
 import { shoppingListResolver } from "./conflictResolution/shoppingList"
 

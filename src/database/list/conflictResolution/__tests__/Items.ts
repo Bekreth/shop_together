@@ -1,5 +1,5 @@
-import { Item, PurchaseState } from "listData"
-import { itemResolver } from "listStorage/conflictResolution/items"
+import { Item, PurchaseState } from "database/list"
+import { itemResolver } from "database/list/conflictResolution/items"
 import { testDate2, testItemList } from "./testData"
 
 const validateOrderless = (item1: Item, item2: Item, expectedItem: Item) => {

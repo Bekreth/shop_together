@@ -15,7 +15,7 @@ import {
 	UserDatabase, 
 	UserDBType,
 	Server,
-} from "user"
+} from "database/user"
 import { UserContext } from "Context"
 
 export default function Profile() {

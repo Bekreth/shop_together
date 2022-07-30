@@ -1,5 +1,5 @@
 import React from "react"
-import {useState, useEffect, useContext} from "react"
+import { useState, useEffect, useContext } from "react"
 
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
@@ -15,7 +15,7 @@ import Select from "@mui/material/Select"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 
-import { User, UserDatabase, initUser } from "user"
+import { User, UserDatabase, initUser } from "database/user"
 import { UserContext } from "Context"
 
 

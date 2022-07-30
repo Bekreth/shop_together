@@ -1,8 +1,8 @@
 import React, { createContext, useEffect } from "react"
 
-import { DatabaseManager } from "./listStorage/databaseManager"
-import { ListStorage } from "./listStorage/database"
-import { UserDatabase } from "user"
+import { DatabaseManager } from "database/databaseManager"
+import { ListStorage } from "database/list"
+import { UserDatabase } from "database/user"
 
 const userDatabase = new UserDatabase()
 const databaseManager = new DatabaseManager()

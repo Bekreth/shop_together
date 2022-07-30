@@ -6,7 +6,7 @@ import Modal from "@mui/material/Modal"
 import Typography from "@mui/material/Typography"
 import { Button } from "@mui/material"
 
-import { Item } from "listData"
+import { Item } from "database/list"
 
 const style = {
 	position: "absolute" as const,

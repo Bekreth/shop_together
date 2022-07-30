@@ -11,7 +11,7 @@ import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 
 import { Editable } from "types"
-import { Server } from "user"
+import { Server } from "database/user"
 
 
 export interface ServerDetailsProps extends Server {

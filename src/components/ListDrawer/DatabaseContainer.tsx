@@ -9,7 +9,7 @@ import AccordionSummary from "@mui/material/AccordionSummary"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
 
-import { Database } from "user"
+import { Database } from "database/user"
 
 export interface DatabaseContainerProps {
 	database: Database

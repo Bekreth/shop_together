@@ -1,6 +1,23 @@
-import {Items, ListData, ListHeader, StorageMetadata, ListType, PurchaseState} from "listData"
-import {item_picker, shoppingListResolver} from "listStorage/conflictResolution"
-import {testMetadata1, testMetadata2, testListHeader, testItemList, testList, testDate2, testDate1, testItem1, testItem2} from "./testData"
+import {
+	Items,
+	ListData,
+	ListHeader,
+	StorageMetadata,
+	ListType,
+	PurchaseState,
+} from "database/list"
+import {item_picker, shoppingListResolver} from "database/list/conflictResolution"
+import {
+	testMetadata1,
+	testMetadata2,
+	testListHeader,
+	testItemList,
+	testList,
+	testDate2,
+	testDate1,
+	testItem1,
+	testItem2,
+} from "./testData"
 
 const validateOrderless = (list1: ListData, list2: ListData, expectedList: ListData) => {
 	const rightReduce = shoppingListResolver(list2, list1)

@@ -1,5 +1,6 @@
-import { Items, ListData } from "listData"
+import { Items, ListData } from "database/list/types"
 import { JoinedMapKeys, missing_map_keys } from "utils/missingMapKeys"
+
 import { itemResolver } from "./items"
 
 export const shoppingListResolver = (previous: ListData, current: ListData) => {

@@ -12,7 +12,7 @@ import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 
 import { UserContext, DatabaseManagerContext } from "Context"
-import { makeList } from "listData"
+import { makeList } from "database/list"
 
 const style = {
 	position: "absolute" as const,

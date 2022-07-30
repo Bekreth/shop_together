@@ -14,7 +14,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 
-import { Database } from "user"
+import { Database } from "database/user"
 import { Editable } from "types"
 
 export interface DatabaseDetailsProps extends Database {

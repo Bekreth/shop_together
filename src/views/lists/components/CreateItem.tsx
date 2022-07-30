@@ -5,9 +5,9 @@ import Box from "@mui/material/Box"
 import Modal from "@mui/material/Modal"
 import Typography from "@mui/material/Typography"
 import TextField from "@mui/material/TextField"
-
-import { Item, makeItem } from "listData"
 import { Button } from "@mui/material"
+
+import { Item, makeItem } from "database/list"
 
 const style = {
 	position: "absolute" as const,

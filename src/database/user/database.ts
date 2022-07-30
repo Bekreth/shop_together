@@ -6,7 +6,6 @@ import {
 	getView,
 	View,
 } from "./design_docs"
-
 import { 
 	Database,
 	User,
@@ -14,7 +13,7 @@ import {
 	Server,
 	userID,
 	userDB,
-} from "user"
+} from "./types"
 
 export class UserDatabase {
 	private db: PouchDB.Database

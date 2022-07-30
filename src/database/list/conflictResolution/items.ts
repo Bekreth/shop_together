@@ -1,4 +1,4 @@
-import { Item, PurchaseState } from "listData"
+import { Item, PurchaseState } from "database/list"
 
 export const itemResolver = (previous: Item, current: Item) => {
 	if (previous._rev === undefined || current._rev === undefined) {

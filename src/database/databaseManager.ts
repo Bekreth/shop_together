@@ -1,5 +1,5 @@
-import { Database } from "user"
-import { ListStorage } from "./database"
+import { Database } from "./user"
+import { ListStorage } from "./list"
 
 export class DatabaseManager {
 	private listDatabase: {[database: string]: ListStorage}

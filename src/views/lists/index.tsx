@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from "react"
 import { useParams } from "react-router-dom"
 
 import ListContents from "views/lists/components/ListContents"
-import { ListData, ListType } from "listData"
+import { ListData, ListType } from "database/list"
 import { DatabaseManagerContext } from "Context"
 
 //TODO: need a better setup than this

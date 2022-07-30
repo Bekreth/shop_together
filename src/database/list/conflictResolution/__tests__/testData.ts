@@ -1,4 +1,14 @@
-import {Items, ListData, ListHeader, StorageMetadata, ListType, PurchaseState, Item, ItemKey} from "listData"
+import { StorageMetadata } from "utils/pouchTypes"
+
+import {
+	Items,
+	ListData,
+	ListHeader,
+	ListType,
+	PurchaseState,
+	Item,
+	ItemKey,
+} from "database/list"
 
 test.skip("skip", () => ({}))
 

@@ -6,7 +6,7 @@ import Drawer from "@mui/material/Drawer"
 import List from "@mui/material/List"
 
 import { DatabaseManagerContext, UserContext } from "Context"
-import { Database } from "user"
+import { Database } from "database/user"
 
 import DatabaseContainer from "./DatabaseContainer"
 import ListActions from "./ListActions"
