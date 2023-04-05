@@ -7,6 +7,7 @@ import { UserDatabase } from "database/user"
 const userDatabase = new UserDatabase()
 const databaseManager = new DatabaseManager()
 
+// TODO: this isn't working, come up with a better loader
 userDatabase.getDatabases()
 	.then(dbs => {
 		databaseManager.addDatabases(dbs)

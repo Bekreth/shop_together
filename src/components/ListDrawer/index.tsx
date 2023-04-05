@@ -38,7 +38,9 @@ export default function ListDrawer(props: ListDrawerProps) {
 	useEffect(() => {
 		const updatedRenderList: JSX.Element[] = []
 		databaseList.forEach(database => {
-			databaseManager.fetchListStorage(database.databaseName)
+			const listStorage = databaseManager.fetchListStorage(database.databaseName)
+			if (!listStorage) return
+			listStorage
 				.getListNames()
 				.then(lists => {
 					updatedRenderList.push(

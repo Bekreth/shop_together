@@ -213,13 +213,22 @@ export default function ServerDetails(props: ServerDetailsProps) {
 						flexDirection: "column"
 					}}
 				>
-					<Button
-						variant="contained"
-						disabled={server.editing}
-						onClick={editServer}
-					>
-						Edit
-					</Button>
+					<ButtonGroup>
+						<Button
+							variant="contained"
+							color="success"
+							//TODO:
+						>
+						Test Connection
+						</Button>
+						<Button
+							variant="contained"
+							disabled={server.editing}
+							onClick={editServer}
+						>
+							Edit
+						</Button>
+					</ButtonGroup>
 					{server.editing &&
 					<ButtonGroup>
 						<Button

@@ -16,9 +16,10 @@ import {
 	UserDBType,
 	Server,
 } from "database/user"
-import { UserContext } from "Context"
+import { UserContext, DatabaseManagerContext } from "Context"
 
 export default function Profile() {
+	const databaseManager = useContext(DatabaseManagerContext)
 	const userDB: UserDatabase = useContext(UserContext)
 
 	const [databaseList, setDatabaseList] = useState<Database[]>([])
@@ -52,7 +53,10 @@ export default function Profile() {
 		},
 		confirmEditDatabase: (database: Database) => {
 			userDB.updateDatabase(database)
-				.then(() => setRerender(rerender + 1))
+				.then(() => {
+					databaseManager.addDatabase(database)
+					setRerender(rerender + 1)
+				})
 				.catch(console.error)
 		} 
 	}
@@ -66,7 +70,7 @@ export default function Profile() {
 				address: "",
 				password: "",
 				username: "",
-				port: 0,
+				port: 5984,
 			})
 				.then(() => setRerender(rerender + 1))
 				.catch(console.error)
@@ -117,7 +121,7 @@ export default function Profile() {
 			/>
 		})
 		setRenderedDatabaseList(updatedRenderList)
-	}, [databaseList])
+	}, [databaseList, serverList])
 
 	return (
 		<>

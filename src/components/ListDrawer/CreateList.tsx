@@ -69,7 +69,9 @@ export default function CreateList(props: CreateListProps) {
 	}
 
 	const createList = () => {
-		databaseManager.fetchListStorage(databaseName)
+		const listStorage = databaseManager.fetchListStorage(databaseName)
+		if (!listStorage) return
+		listStorage
 			.createList(makeList(listName))
 			.then(_ => {
 				close()

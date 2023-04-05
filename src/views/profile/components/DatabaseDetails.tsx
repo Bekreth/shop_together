@@ -132,12 +132,14 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 						>
 							<InputLabel>Server Name</InputLabel>
 							<Select 
-								value={database.serverID ? database.serverID : "00000"}
+								id="server-selector"
+								value={database.serverID ? database.serverID : "NoKey"}
+								label="Server Name"
 								onChange={updateServerName}
 							>
 								<MenuItem
-									key="00000"
-									value="00000"
+									key="NoKey"
+									value="NoKey"
 								>
 									No Server
 								</MenuItem>

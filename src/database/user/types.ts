@@ -7,7 +7,7 @@ export enum UserDBType {
 }
 
 export const userID = "user_data"
-export const userDB = "user_data"
+export const userDB = "shop_together_user_data"
 
 export interface User extends StorageMetadata {
 	type: string

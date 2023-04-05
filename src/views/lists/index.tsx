@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from "react"
 import { useParams } from "react-router-dom"
 
 import ListContents from "views/lists/components/ListContents"
-import { ListData, ListType } from "database/list"
+import { ListData, ListType, ListStorage } from "database/list"
 import { DatabaseManagerContext } from "Context"
 
 //TODO: need a better setup than this
@@ -21,30 +21,30 @@ export default function ShoppingList() {
 		databaseName,
 		listName,
 	} = useParams()
-	console.log("landed in ", databaseName, listName)
+	const databaseManager = useContext(DatabaseManagerContext)
 
-
-	const dbClient = useContext(DatabaseManagerContext)
-		.fetchListStorage(databaseName ? databaseName : "")
-
+	const [listStorage, setListStorage] = useState<ListStorage | undefined>(undefined)
 	const [focusedList, setFocusedList] = useState<ListData>(emptyList)
 
 	useEffect(() => {
-		if (listName != undefined) {
-			dbClient.getListByName(listName)
+		setListStorage(databaseManager.fetchListStorage(databaseName))
+	}, [databaseManager, databaseName])
+
+	useEffect(() => {
+		if (listName != undefined && listStorage != undefined) {
+			listStorage.getListByName(listName)
 				.then(setFocusedList)
 				.catch(console.error)
 		}
-	}, [dbClient, listName])
-
+	}, [listStorage, listName])
 
 	// TODO: if db client is undefined, navigate home
 	return (
 		<>
-			{focusedList !== emptyList && 
+			{(focusedList !== emptyList && listStorage != undefined) && 
 				<ListContents
 					focusedList={focusedList}
-					dbClient={dbClient}
+					listStorage={listStorage}
 				/>
 			}
 		</>
