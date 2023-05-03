@@ -262,7 +262,7 @@ const purchasedItems = (input: {
 						<Button
 							onClick={() => returnToBuy(list, item._id)}
 						>
-							Read to List
+							Re-Add to List
 						</Button>
 					</ListItem>         
 				))
