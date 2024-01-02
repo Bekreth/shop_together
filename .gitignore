@@ -2,5 +2,7 @@ node_modules/
 build/
 test_database/
 
+yarn-error.log
+
 *.swp
 *.tmuxp/
