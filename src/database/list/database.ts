@@ -59,7 +59,7 @@ export class ListStorage {
 			}
 
 			this.db.sync(remoteDB, options)
-			//setInterval(() => resolveConflicts(this.shoppingListResolver), cleanup_timer)
+			setInterval(() => resolveConflicts(this.shoppingListResolver), cleanup_timer)
 		} else {
 			console.log(`Database ${databaseName} has no server to attach to`)
 		}
