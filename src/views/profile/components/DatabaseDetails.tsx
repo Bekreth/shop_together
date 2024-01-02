@@ -70,6 +70,7 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 		})
 	}
 
+	// TODO: copy over existsing lists
 	const updateDatabaseName = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setDatabase({
 			...database,

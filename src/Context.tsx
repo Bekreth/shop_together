@@ -7,7 +7,7 @@ const userDatabase = new UserDatabase()
 const databaseManager = new DatabaseManager()
 
 // TODO: this isn't working, come up with a better loader
-userDatabase.getDatabases()
+userDatabase.getZippedDatabaseServers()
 	.then(dbs => {
 		databaseManager.addDatabases(dbs)
 	})

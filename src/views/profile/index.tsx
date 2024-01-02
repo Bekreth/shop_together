@@ -123,15 +123,23 @@ export default function Profile() {
 		setRenderedDatabaseList(updatedRenderList)
 	}, [databaseList, serverList])
 
+	const flex_style = {
+		display: "flex",
+		flexWrap: "wrap",
+	} as const
 	return (
 		<>
 			<UserDetails/>
 			<Divider/>
-			<NewDatabase newDatabase={databaseInteractions.newDatabase}/>
-			{renderedDatabaseList}
+			<div style={flex_style}>
+				<NewDatabase newDatabase={databaseInteractions.newDatabase}/>
+				{renderedDatabaseList}
+			</div>
 			<Divider/>
-			<NewServer newServer={serverInteractions.newServer}/>
-			{renderedServerList}
+			<div style={flex_style}>
+				<NewServer newServer={serverInteractions.newServer}/>
+				{renderedServerList}
+			</div>
 		</>
 	)
 }

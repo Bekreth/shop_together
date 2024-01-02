@@ -1,4 +1,4 @@
-import { Database } from "./user"
+import { Database, Server } from "./user"
 import { ListStorage } from "./list"
 
 export class DatabaseManager {
@@ -8,16 +8,19 @@ export class DatabaseManager {
 		this.listDatabase = new Map()
 	}
 
-	addDatabases(databases: Database[]) {
-		for (const database of databases) {
+	addDatabases(databases: [Database, Server?][]) {
+		for (const [database, server] of databases) {
 			if (!this.listDatabase.has(database._id)) {
-				this.addDatabase(database)
+				this.addDatabase(database, server)
 			}
 		}
 	}
 
-	addDatabase(database: Database) {
-		this.listDatabase.set(database.databaseName, new ListStorage(database.databaseName))
+	addDatabase(database: Database, server?: Server) {
+		this.listDatabase.set(
+			database.databaseName, 
+			new ListStorage(database.databaseName, server),
+		)
 	}
 
 	//TODO: Make this an Optional return

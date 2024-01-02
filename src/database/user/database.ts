@@ -131,4 +131,18 @@ export class UserDatabase {
 		return new Promise((_, reject) => reject(`No rev found in ${server._id}`))
 	}
 
+	// Joint
+	async getZippedDatabaseServers(): Promise<[Database, Server?][]> {
+		return this.getDatabases().then(databases => {
+			const promises: Promise<[Database, Server?]>[] = databases.map(database => {
+				if (database.serverID) {
+					return this.db.get<Server>(database.serverID)
+						.then(server => [database, server])
+				} else {
+					return new Promise<[Database, undefined]>((resolve, _) => resolve([database, undefined]))
+				}
+			})
+			return Promise.all(promises)
+		})
+	}
 }

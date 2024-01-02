@@ -1,17 +1,11 @@
 import PouchDB from "pouchdb"
 
+import { Server } from "../user"
+
 import { ListData } from "./types"
 import { 
 	buildShoppingResolver, 
 } from "./resolvers"
-import {
-	host, 
-	password, 
-	port, 
-	scheme, 
-	username, 
-	cleanup_timer,
-} from "./constants"
 import { StorageMetadata } from "utils/pouchTypes"
 
 import { 
@@ -26,13 +20,17 @@ import {
 	View,
 } from "./design_docs"
 
+//TODO: Get this secured
+const scheme = "http"
+const cleanup_timer = 5_000
+
 export class ListStorage {
 	private db: PouchDB.Database
 	private shoppingListResolver: ConflictResolver<ListData>
 	private watching?: PouchDB.Core.Changes<ListData>
 
-	constructor(databaseName: string) {
-		console.log("Starting the db connect")
+	constructor(databaseName: string, server?: Server) {
+		console.log(`Starting new database ${databaseName}`)
 		this.db = new PouchDB(databaseName)
 		this.db.get(designDocPath)
 			.then(() => console.log(`Design doc ${designDocPath} already exists`))
@@ -41,29 +39,30 @@ export class ListStorage {
 				this.db.put(designDoc)
 			})
 		this.shoppingListResolver = buildShoppingResolver(this.db)
-		/*
-		const remote = `${scheme}://${host}:${port}/${databaseName}`
-		const remoteDB = new PouchDB(remote, {
-			skip_setup: true,
-			auth: {
-				username: username,
-				password: password,
+
+		if (server !== undefined) {
+			const remote = `${scheme}://${server.address}:${server.port}/${databaseName}`
+			console.log(`Connecting to ${remote}`)
+			const remoteDB = new PouchDB(remote, {
+				skip_setup: true,
+				auth: {
+					username: server.username,
+					password: server.password,
+				}
+			})
+
+			const options = {
+				live: true,
+				retry: true,
+				continuous: true,
+				auto_compaction: true
 			}
-		})
-	 	*/
 
-		/*
-		const options = {
-			live: true,
-			retry: true,
-			continuous: true,
-			auto_compaction: true
+			this.db.sync(remoteDB, options)
+			setInterval(() => resolveConflicts(this.shoppingListResolver), cleanup_timer)
+		} else {
+			console.log(`Database ${databaseName} has no server to attach to`)
 		}
-	 	*/
-
-		// this.db.destroy()
-		//PouchDB.sync(remoteDB, this.db, options)
-		//setInterval(() => resolveConflicts(this.shoppingListResolver), cleanup_timer)
 	}
 
 	async getListNames(): Promise<string[]> {
