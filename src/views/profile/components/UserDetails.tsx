@@ -15,7 +15,7 @@ import Select from "@mui/material/Select"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 
-import { User, UserDatabase, initUser } from "database/user"
+import { UserDatabase, initUser } from "database/user"
 import { UserContext } from "Context"
 
 

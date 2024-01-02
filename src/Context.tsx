@@ -1,7 +1,6 @@
-import React, { createContext, useEffect } from "react"
+import React, { createContext } from "react"
 
 import { DatabaseManager } from "database/databaseManager"
-import { ListStorage } from "database/list"
 import { UserDatabase } from "database/user"
 
 const userDatabase = new UserDatabase()

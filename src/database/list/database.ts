@@ -35,8 +35,8 @@ export class ListStorage {
 		console.log("Starting the db connect")
 		this.db = new PouchDB(databaseName)
 		this.db.get(designDocPath)
-			.then(success => console.log(`Design doc ${designDocPath} already exists`))
-			.catch(err => {
+			.then(() => console.log(`Design doc ${designDocPath} already exists`))
+			.catch(() => {
 				console.log(`Design doc ${designDocPath} doesnt exists.  Adding it.`)
 				this.db.put(designDoc)
 			})

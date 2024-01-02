@@ -26,11 +26,11 @@ export class UserDatabase {
 
 	private instantiateDatabase() {
 		this.db.get(designDocPath)
-			.then(success => console.log(`Design doc ${designDocPath} already exists`))
-			.catch(err => {
+			.then(() => console.log(`Design doc ${designDocPath} already exists`))
+			.catch(() => {
 				console.log(`Design doc ${designDocPath} doesn't exist. Adding it.`)
 				this.db.put(designDoc)
-					.then(success => console.log(`Design doc ${designDocPath} added`))
+					.then(() => console.log(`Design doc ${designDocPath} added`))
 					.catch(err2 => console.error(`Failed to put design doc ${designDocPath}:${err2}`))
 			})
 		this.getUser()

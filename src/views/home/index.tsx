@@ -4,7 +4,6 @@ import Box from "@mui/material/Box"
 import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
 import Divider from "@mui/material/Divider"
-import PersonIcon from "@mui/icons-material/Person"
 import Typography from "@mui/material/Typography"
 
 
