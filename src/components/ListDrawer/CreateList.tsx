@@ -73,7 +73,7 @@ export default function CreateList(props: CreateListProps) {
 		if (!listStorage) return
 		listStorage
 			.createList(makeList(listName))
-			.then(_ => {
+			.then(() => {
 				close()
 				navigate(databaseName, listName)
 			})

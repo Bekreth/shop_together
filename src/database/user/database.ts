@@ -26,11 +26,11 @@ export class UserDatabase {
 
 	private instantiateDatabase() {
 		this.db.get(designDocPath)
-			.then(success => console.log(`Design doc ${designDocPath} already exists`))
-			.catch(err => {
+			.then(() => console.log(`Design doc ${designDocPath} already exists`))
+			.catch(() => {
 				console.log(`Design doc ${designDocPath} doesn't exist. Adding it.`)
 				this.db.put(designDoc)
-					.then(success => console.log(`Design doc ${designDocPath} added`))
+					.then(() => console.log(`Design doc ${designDocPath} added`))
 					.catch(err2 => console.error(`Failed to put design doc ${designDocPath}:${err2}`))
 			})
 		this.getUser()
@@ -131,4 +131,18 @@ export class UserDatabase {
 		return new Promise((_, reject) => reject(`No rev found in ${server._id}`))
 	}
 
+	// Joint
+	async getZippedDatabaseServers(): Promise<[Database, Server?][]> {
+		return this.getDatabases().then(databases => {
+			const promises: Promise<[Database, Server?]>[] = databases.map(database => {
+				if (database.serverID) {
+					return this.db.get<Server>(database.serverID)
+						.then(server => [database, server])
+				} else {
+					return new Promise<[Database, undefined]>((resolve, _) => resolve([database, undefined]))
+				}
+			})
+			return Promise.all(promises)
+		})
+	}
 }
