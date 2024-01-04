@@ -6,7 +6,7 @@ PORT:=5984
 build_shop_together_image:
 	@yarn
 	@yarn build
-	docker build -t shop_together:$(shell git describe --tags) .
+	@docker build -t shop_together:$(shell git describe --tags) .
 
 start_couchdb:
 	@if [ "$(shell docker inspect -f '{{.State.Running}}' ${DATABASE_NAME} 2>/dev/null)" = "false" ]; then \
