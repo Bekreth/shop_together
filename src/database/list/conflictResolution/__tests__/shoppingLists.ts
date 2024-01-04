@@ -1,16 +1,9 @@
 import {
-	Items,
 	ListData,
-	ListHeader,
-	StorageMetadata,
 	ListType,
-	PurchaseState,
 } from "database/list"
 import {item_picker, shoppingListResolver} from "database/list/conflictResolution"
 import {
-	testMetadata1,
-	testMetadata2,
-	testListHeader,
 	testItemList,
 	testList,
 	testDate2,

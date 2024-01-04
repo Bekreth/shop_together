@@ -1,12 +1,10 @@
 import { StorageMetadata } from "utils/pouchTypes"
 
 import {
-	Items,
 	ListData,
 	ListHeader,
 	ListType,
 	PurchaseState,
-	Item,
 	ItemKey,
 } from "database/list"
 

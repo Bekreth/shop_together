@@ -9,7 +9,6 @@ import {
 import { StorageMetadata } from "utils/pouchTypes"
 
 import { 
-	ConflictEntry,
 	ConflictResolver,
 	resolveConflicts
 } from "./conflictResolution"
