@@ -22,7 +22,7 @@ import {
 
 //TODO: Get this secured
 const scheme = "http"
-const cleanup_timer = 5_000
+const cleanup_timer = 60_000
 
 export class ListStorage {
 	private db: PouchDB.Database
@@ -59,7 +59,7 @@ export class ListStorage {
 			}
 
 			this.db.sync(remoteDB, options)
-			//setInterval(() => resolveConflicts(this.shoppingListResolver), cleanup_timer)
+			setInterval(() => resolveConflicts(this.shoppingListResolver), cleanup_timer)
 		} else {
 			console.log(`Database ${databaseName} has no server to attach to`)
 		}
