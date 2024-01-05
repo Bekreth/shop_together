@@ -37,6 +37,7 @@ export const testItem1 = {
 	_rev: "1_someRev1",
 	name: "Item1",
 	state: PurchaseState.TO_BUY,
+	price: undefined,
 	created: testDate1,
 	updated: testDate1,
 }
@@ -46,6 +47,7 @@ export const testItem2 = {
 	_rev: "1_someRev1",
 	name: "Item2",
 	state: PurchaseState.PURCHASED,
+	price: undefined,
 	created: testDate1,
 	updated: testDate1,
 }
@@ -55,6 +57,7 @@ export const testItem3 = {
 	_rev: "1_someRev1",
 	name: "Item3",
 	state: PurchaseState.IN_CART,
+	price: undefined,
 	created: testDate1,
 	updated: testDate1,
 }

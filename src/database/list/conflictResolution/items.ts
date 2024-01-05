@@ -1,4 +1,4 @@
-import { Item, PurchaseState } from "database/list"
+import { Item, PurchaseState, Price } from "database/list"
 
 export const itemResolver = (previous: Item, current: Item) => {
 	if (previous._rev === undefined || current._rev === undefined) {
@@ -15,6 +15,7 @@ export const itemResolver = (previous: Item, current: Item) => {
 		created: previous.created,
 		updated: largest_updated,
 		state: state_picker(previous, current),
+		price: price_picker(previous, current)
 	}
 	return output
 }
@@ -41,4 +42,10 @@ function state_picker(previous: Item, current: Item): PurchaseState {
 	} else {
 		return previous.state
 	}
+}
+
+function price_picker(previous: Item, current: Item): Price | undefined {
+	if (previous.price === current.price) return previous.price
+	if (previous.updated > current.updated) return previous.price
+	return current.price
 }

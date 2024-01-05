@@ -22,9 +22,23 @@ export interface Items {
 
 export interface Item extends StorageMetadata {
   name: string
+	price: Price | undefined
   state: PurchaseState 
   created: Date
   updated: Date
+}
+
+export interface Price {
+	amount: number | undefined
+	unit: PriceUnit | undefined
+}
+
+export enum PriceUnit {
+	NONE = "None",
+	BOX = "box",
+	GRAMS_100 = "100 grams",
+	LITER = "liter",
+	POUND = "pound"
 }
 
 export enum PurchaseState {
@@ -45,13 +59,16 @@ export const makeList: (name: string) => ListData = (name: string) => {
 	}
 }
 
-export const makeItem: (name: string) => Item = (name: string) => {
+export const makeItem: (
+	name: string, 
+) => Item = (name: string) => {
 	return {
 		_id: uuidv4(),
 		// TODO: Remove this rev and have items be their own object
 		_rev: uuidv4(),
 		name: name,
 		state: PurchaseState.TO_BUY,
+		price: undefined,
 		created: new Date(),
 		updated: new Date()
 	}

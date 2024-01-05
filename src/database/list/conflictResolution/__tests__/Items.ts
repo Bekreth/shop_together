@@ -1,4 +1,4 @@
-import { Item, PurchaseState } from "database/list"
+import { Item, PurchaseState, Price, PriceUnit } from "database/list"
 import { itemResolver } from "database/list/conflictResolution/items"
 import { testDate2, testItemList } from "./testData"
 
@@ -30,6 +30,37 @@ test("Last-write-wins in name changes", () => {
 		...item,
 		_rev: "3-hello",
 		name: "new name",
+		updated: testDate2
+	}
+
+	validateOrderless(item, updated_item, expected_item)
+})
+
+test("Last-write-wins in price changes", () => {
+	const item = {
+		...testItemList["item1ID"],
+		price: {
+			amount: 10.00,
+			unit: PriceUnit.GRAMS_100,
+		},
+	}
+	const updated_item = {
+		...item,
+		_rev: "3-hello",
+		price: {
+			amount: 11.00,
+			unit: PriceUnit.BOX,
+		},
+		updated: testDate2
+	}
+  
+	const expected_item = {
+		...item,
+		_rev: "3-hello",
+		price: {
+			amount: 11.00,
+			unit: PriceUnit.BOX,
+		},
 		updated: testDate2
 	}
 

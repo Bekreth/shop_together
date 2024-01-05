@@ -4,9 +4,12 @@ import { TextField } from "@mui/material"
 import Box from "@mui/material/Box"
 import Modal from "@mui/material/Modal"
 import Typography from "@mui/material/Typography"
+import Select, { SelectChangeEvent }from "@mui/material/Select"
+import MenuItem from "@mui/material/MenuItem"
 import { Button } from "@mui/material"
+import CurrencyInput from "react-currency-input-field"
 
-import { Item } from "database/list"
+import { Item, Price, PriceUnit } from "database/list"
 
 const style = {
 	position: "absolute" as const,
@@ -20,6 +23,10 @@ const style = {
 	p: 4,
 }
 
+const emptyPrice: Price = {
+	amount: undefined,
+	unit: PriceUnit.NONE,
+}
 
 export interface EditItemProps {
   item: Item
@@ -33,6 +40,7 @@ export default function EditItem(props: EditItemProps) {
 
 	const [itemName, setItemName] = useState(item.name)
 	const [itemState] = useState(item.state)
+	const [itemPrice, setItemPrice] = useState<Price>(emptyPrice)
 
 	return (
 		<Modal
@@ -52,12 +60,46 @@ export default function EditItem(props: EditItemProps) {
 					onChange={event => setItemName(event.target.value)}
 				/>
 				<br/>
+				<CurrencyInput
+					id="itemCost2"
+					name="itemCostName"
+					prefix="$"
+					allowNegativeValue={false}
+					placeholder="Item Cost"
+					decimalsLimit={2}
+					onValueChange={(value, name, values) => {
+						if (values) {
+							setItemPrice({
+								...itemPrice,
+								amount: values.float ? values.float : undefined,
+							})
+						}
+					}}
+				/>
+				<Typography>per</Typography>
+				<Select 
+					label="per unit" 
+					defaultValue={PriceUnit.NONE}
+					onChange={(event: SelectChangeEvent<PriceUnit>) => {
+						setItemPrice({
+							...itemPrice,
+							unit: event.target.value as unknown as PriceUnit,
+						})
+					}}
+				>
+					<MenuItem value={PriceUnit.BOX}>{PriceUnit.BOX}</MenuItem>
+					<MenuItem value={PriceUnit.GRAMS_100}>100 grams</MenuItem>
+					<MenuItem value={PriceUnit.LITER}>liter</MenuItem>
+					<MenuItem value={PriceUnit.POUND}>pound</MenuItem>
+				</Select>
+				<br/>
 				<Button
 					variant="contained"
 					onClick={() => {
 						const newItem: Item = {
 							_id: item._id,
 							_rev: item._rev,
+							price: itemPrice === emptyPrice ? undefined : itemPrice,
 							name: itemName,
 							state: itemState,
 							created: item.created,

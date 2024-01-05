@@ -11,7 +11,7 @@ import ListItemText from "@mui/material/ListItemText"
 import ListSubheader from "@mui/material/ListSubheader"
 import Switch from "@mui/material/Switch"
 
-import { Item, ListData, PurchaseState, ListStorage } from "database/list"
+import { Item, ListData, PurchaseState, ListStorage, Price, PriceUnit } from "database/list"
 import CreateItem from "views/lists/components/CreateItem"
 import EditItem from "views/lists/components/EditItem"
 
@@ -21,6 +21,15 @@ const emptyItem: Item = {
 	state: PurchaseState.TO_BUY,
 	created: new Date(),
 	updated: new Date(),
+	price: undefined,
+}
+
+const priceToString: (price: Price) => string = (price) => {
+	if (price.unit !== PriceUnit.NONE) {
+		return price.amount + " per " + price.unit
+	} else {
+		return price.amount + ""
+	}
 }
 
 export interface ListContentsProps {
@@ -192,6 +201,11 @@ const unpurchasedItems = (input: {
 						<ListItemText>
 							{item.name}
 						</ListItemText>
+						{item.price && 
+							<ListItemText>
+								{priceToString(item.price)}
+							</ListItemText>
+						}
 						{editingItems &&
 							<Box>
 								<Button
@@ -241,6 +255,11 @@ const purchasedItems = (input: {
 						<ListItemText>
 							{item.name}
 						</ListItemText>
+						{item.price && 
+							<ListItemText>
+								{priceToString(item.price)}
+							</ListItemText>
+						}
 						{editingItems &&
 							<Box>
 								<Button
