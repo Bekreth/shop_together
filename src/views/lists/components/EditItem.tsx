@@ -23,7 +23,7 @@ const style = {
 
 export interface EditItemProps {
   item: Item
-  saveItemEdits: (originalItemName: string, item: Item) => void
+  saveItemEdits: (itemID: string, item: Item) => void
   isOpen: boolean
   close: () => void
 }
@@ -64,7 +64,7 @@ export default function EditItem(props: EditItemProps) {
 							updated: new Date(),
 						}
 						console.log(newItem)
-						saveItemEdits(item.name, newItem)
+						saveItemEdits(item._id, newItem)
 						close()
 					}}
 				>

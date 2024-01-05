@@ -251,7 +251,7 @@ const purchasedItems = (input: {
 								</Button>
 								<Button
 									variant="outlined"
-									onDoubleClick={() => deleteItem(item)}
+									onClick={() => deleteItem(item)}
 									color='warning'
 								>
 									Delete
