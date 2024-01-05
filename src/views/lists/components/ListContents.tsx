@@ -26,9 +26,9 @@ const emptyItem: Item = {
 
 const priceToString: (price: Price) => string = (price) => {
 	if (price.unit !== PriceUnit.NONE) {
-		return price.amount + " per " + price.unit
+		return "$" + price.amount + " per " + price.unit
 	} else {
-		return price.amount + ""
+		return "$" + price.amount + ""
 	}
 }
 
@@ -201,7 +201,7 @@ const unpurchasedItems = (input: {
 						<ListItemText>
 							{item.name}
 						</ListItemText>
-						{item.price && 
+						{item.price && item.price.amount && 
 							<ListItemText>
 								{priceToString(item.price)}
 							</ListItemText>
@@ -255,8 +255,8 @@ const purchasedItems = (input: {
 						<ListItemText>
 							{item.name}
 						</ListItemText>
-						{item.price && 
-							<ListItemText>
+						{item.price && item.price.amount && 
+							<ListItemText style={{justifyContent:"left"}}>
 								{priceToString(item.price)}
 							</ListItemText>
 						}
