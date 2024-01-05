@@ -12,7 +12,6 @@ import ListItemText from "@mui/material/ListItemText"
 import CreateList from "./CreateList"
 
 const createList = "Create List"
-const editList = "Edit List"
 
 export default function ListActions() {
 	const navigate = useNavigate()
@@ -34,12 +33,6 @@ export default function ListActions() {
 					<AddIcon/>
 				</ListItemIcon>
 				<ListItemText primary={createList}/>
-			</ListItem>
-			<ListItem>
-				<ListItemIcon>
-					<SettingsIcon/>
-				</ListItemIcon>
-				<ListItemText primary={editList}/>
 			</ListItem>
 			<CreateList
 				isOpen={isCreatingList}
