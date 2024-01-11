@@ -4,5 +4,6 @@ test_database/
 
 yarn-error.log
 
+*.tar
 *.swp
 *.tmuxp/

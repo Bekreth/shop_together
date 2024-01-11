@@ -21,14 +21,15 @@ export default function ShoppingList() {
 		databaseName,
 		listName,
 	} = useParams()
-	const databaseManager = useContext(DatabaseManagerContext)
+	const {listStorageID} = useContext(DatabaseManagerContext)
 
 	const [listStorage, setListStorage] = useState<ListStorage | undefined>(undefined)
 	const [focusedList, setFocusedList] = useState<ListData>(emptyList)
 
 	useEffect(() => {
-		setListStorage(databaseManager.fetchListStorage(databaseName))
-	}, [databaseManager, databaseName])
+		const thisStorage = listStorageID.find(value => value.dbName == databaseName)
+		thisStorage ? setListStorage(thisStorage.storage) : setListStorage(undefined)
+	}, [listStorageID, databaseName])
 
 	useEffect(() => {
 		if (listName != undefined && listStorage != undefined) {

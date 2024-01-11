@@ -39,7 +39,7 @@ export default function CreateList(props: CreateListProps) {
 		navigate,
 	} = props
 
-	const databaseManager = useContext(DatabaseManagerContext)
+	const {listStorageID} = useContext(DatabaseManagerContext)
 	const dbClient = useContext(UserContext)
 	const [databaseSelectors, setDatabaseSelectors] = useState<JSX.Element[]>([])
 
@@ -69,9 +69,10 @@ export default function CreateList(props: CreateListProps) {
 	}
 
 	const createList = () => {
-		const listStorage = databaseManager.fetchListStorage(databaseName)
-		if (!listStorage) return
-		listStorage
+		const possibleListStorage = listStorageID.find(value => value.dbName == databaseName)
+		if (!possibleListStorage) return
+		possibleListStorage
+			.storage
 			.createList(makeList(listName))
 			.then(() => {
 				close()

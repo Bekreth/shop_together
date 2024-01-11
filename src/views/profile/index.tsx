@@ -19,7 +19,7 @@ import {
 import { UserContext, DatabaseManagerContext } from "Context"
 
 export default function Profile() {
-	const databaseManager = useContext(DatabaseManagerContext)
+	const {addDBToManager} = useContext(DatabaseManagerContext)
 	const userDB: UserDatabase = useContext(UserContext)
 
 	const [databaseList, setDatabaseList] = useState<Database[]>([])
@@ -54,7 +54,7 @@ export default function Profile() {
 		confirmEditDatabase: (database: Database) => {
 			userDB.updateDatabase(database)
 				.then(() => {
-					databaseManager.addDatabase(database)
+					addDBToManager(database)
 					setRerender(rerender + 1)
 				})
 				.catch(console.error)

@@ -1,6 +1,12 @@
 import { Database, Server } from "./user"
 import { ListStorage } from "./list"
 
+export interface ListStorageID {
+	dbID: string
+	dbName: string
+	storage: ListStorage
+}
+
 export class DatabaseManager {
 	private listDatabase: Map<string, ListStorage>
 
