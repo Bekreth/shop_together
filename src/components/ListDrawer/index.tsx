@@ -23,7 +23,7 @@ export default function ListDrawer(props: ListDrawerProps) {
 	} = props
 
 	const userDatabase = useContext(UserContext)
-	const databaseManager = useContext(DatabaseManagerContext)
+	const {listStorageID} = useContext(DatabaseManagerContext)
 
 	const [databaseList, setDatabaseList] = useState<Database[]>([])
 
@@ -38,9 +38,10 @@ export default function ListDrawer(props: ListDrawerProps) {
 	useEffect(() => {
 		const updatedRenderList: JSX.Element[] = []
 		databaseList.forEach(database => {
-			const listStorage = databaseManager.fetchListStorage(database.databaseName)
-			if (!listStorage) return
-			listStorage
+			const possibleListStorage = listStorageID.find(value => value.dbID === database._id)
+			if (!possibleListStorage) return
+			possibleListStorage
+				.storage
 				.getListNames()
 				.then(lists => {
 					updatedRenderList.push(
@@ -55,7 +56,7 @@ export default function ListDrawer(props: ListDrawerProps) {
 				.catch(console.error)
 		})
 		setRenderedDatabaseList(updatedRenderList)
-	}, [databaseList])
+	}, [databaseList, listStorageID])
 
 
 	return (
