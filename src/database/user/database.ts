@@ -45,7 +45,6 @@ export class UserDatabase {
 	}
 
 	private connectToRemote(remote_server: Connection, remote_id: string): PouchDB.Database {
-		const scheme = "http"
 		const source = `${connectionToString(remote_server)}/${remote_id}`
 		return new PouchDB(source, {
 			skip_setup: true,
