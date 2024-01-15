@@ -14,13 +14,21 @@ export interface User extends StorageMetadata {
 	username: string
 }
 
-export interface Server extends StorageMetadata {
-	type: string
-	serverName: string
+export interface Connection {
+	scheme: "http" | "https"
 	address: string
 	password: string
 	username: string
 	port: number
+}
+
+export function connectionToString(connection: Connection) {
+	return `${connection.scheme}://${connection.address}:${connection.port}`
+}
+
+export interface Server extends Connection, StorageMetadata {
+	type: string
+	serverName: string
 }
 
 export interface Database extends StorageMetadata {

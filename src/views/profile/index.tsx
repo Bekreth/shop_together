@@ -67,6 +67,7 @@ export default function Profile() {
 				_id: uuidv4(),
 				type: UserDBType.SERVER,
 				serverName: "",
+				scheme: "https",
 				address: "",
 				password: "",
 				username: "",

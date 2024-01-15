@@ -52,7 +52,8 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 	}
 
 	const confirmEditing = () => {
-		confirmEditDatabase(database)
+		const {editing, ...databaseData} = database
+		confirmEditDatabase(databaseData)
 		setDatabase({
 			...database,
 			editing: false,

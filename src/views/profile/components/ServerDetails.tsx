@@ -9,6 +9,11 @@ import CardActions from "@mui/material/CardActions"
 import Grid from "@mui/material/Grid"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
+import Radio from "@mui/material/Radio"
+import RadioGroup from "@mui/material/RadioGroup"
+import FormControlLabel from "@mui/material/FormControlLabel"
+import FormControl from "@mui/material/FormControl"
+import FormLabel from "@mui/material/FormLabel"
 
 import { Editable } from "types"
 import { Server } from "database/user"
@@ -25,6 +30,7 @@ export default function ServerDetails(props: ServerDetailsProps) {
 		_rev,
 		type,
 		serverName,
+		scheme,
 		address,
 		password,
 		username,
@@ -34,15 +40,8 @@ export default function ServerDetails(props: ServerDetailsProps) {
 	} = props
 
 	const [server, setServer] = useState<Server & Editable>({
-		_id: _id,
-		_rev: _rev,
-		type: type,
+		...props,
 		editing: false,
-		serverName: serverName,
-		address: address,
-		password: password,
-		username: username,
-		port: port
 	}) 
 
 	const editServer = () => {
@@ -53,7 +52,8 @@ export default function ServerDetails(props: ServerDetailsProps) {
 	}
 
 	const confirmEditing = () => {
-		confirmEditServer(server)
+		const {editing, ...serverData} = server
+		confirmEditServer(serverData)
 		setServer({
 			...server,
 			editing: false
@@ -62,15 +62,8 @@ export default function ServerDetails(props: ServerDetailsProps) {
 
 	const cancelEditing = () => {
 		setServer({
-			_id: _id,
-			_rev: _rev,
-			type: type,
+			...props,
 			editing: false,
-			serverName: serverName,
-			address: address,
-			password: password,
-			username: username,
-			port: port
 		})
 	}
 
@@ -79,6 +72,15 @@ export default function ServerDetails(props: ServerDetailsProps) {
 			...server,
 			serverName: event.target.value,
 		})
+	}
+
+	const updateScheme = (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (event.target.value === "http" || event.target.value === "https") {
+			setServer({
+				...server,
+				scheme: event.target.value,
+			})
+		}
 	}
 
 	const updateAddress = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,7 +123,9 @@ export default function ServerDetails(props: ServerDetailsProps) {
 				}
 			}}
 		>
-			<Card>
+			<Card style={{
+				height: "30vw",
+			}}>
 				<Typography variant="h4" m={2}>
 					Server Details
 				</Typography>
@@ -142,6 +146,34 @@ export default function ServerDetails(props: ServerDetailsProps) {
 							variant="outlined"
 							value={server.serverName}
 							onChange={updateServerName}
+						/>
+					</Grid>
+
+					<Grid item xs={6}>
+						<Typography variant="h6">
+							Scheme
+						</Typography>
+					</Grid>
+					<Grid item xs={5}>
+						<FormControlLabel
+							label="HTTPS"
+							control={
+								<Radio 
+									checked={server.scheme === "https"}
+									onChange={updateScheme}
+									value="https"
+								/>
+							}
+						/>
+						<FormControlLabel
+							label="HTTP"
+							control={
+								<Radio 
+									checked={server.scheme === "http"}
+									onChange={updateScheme}
+									value="http"
+								/>
+							}
 						/>
 					</Grid>
 
@@ -206,6 +238,7 @@ export default function ServerDetails(props: ServerDetailsProps) {
 						/>
 					</Grid>
 				</Grid>
+
 				<CardActions
 					sx={{
 						display: "flexbox",

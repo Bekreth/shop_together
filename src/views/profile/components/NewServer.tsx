@@ -25,7 +25,7 @@ export default function NewServer(props: NewServerProps) {
 				"& > :not(style)": {
 					m: 1, 
 					width: 512,
-					height: 512
+					height: "30vw"
 				}
 			}}
 		>
