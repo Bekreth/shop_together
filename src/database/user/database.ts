@@ -7,6 +7,8 @@ import {
 	View,
 } from "./design_docs"
 import { 
+	Connection,
+	connectionToString,
 	Database,
 	User,
 	UserDBType,
@@ -40,6 +42,26 @@ export class UserDatabase {
 		this.db.destroy()
 		this.db = new PouchDB(userDB)
 		this.instantiateDatabase()
+	}
+
+	private connectToRemote(remote_server: Connection, remote_id: string): PouchDB.Database {
+		const scheme = "http"
+		const source = `${connectionToString(remote_server)}/${remote_id}`
+		return new PouchDB(source, {
+			skip_setup: true,
+			auth: {
+				username: remote_server.username,
+				password: remote_server.password,
+			}
+		})
+	}
+
+	loadFromRemote(remote_server: Connection, remote_id: string) {
+		this.db.replicate.from(this.connectToRemote(remote_server, remote_id))
+	}
+
+	saveToRemote(remote_server: Connection, remote_id: string) {
+		this.db.replicate.to(this.connectToRemote(remote_server, remote_id))
 	}
 
 	// User

@@ -1,5 +1,5 @@
 DATABASE_NAME:=shop_together_couchdb
-DATABASE_IMAGE:="couchdb:3.1.1"
+DATABASE_IMAGE:="couchdb:3.3.3"
 LOCAL_NETWORK:=local_testing_network
 PORT:=5984
 
@@ -21,8 +21,6 @@ start_couchdb:
 		-e COUCHDB_USER=admin \
 		-e COUCHDB_PASSWORD=password \
 		${DATABASE_IMAGE}; \
-		sleep 5; \
-		./ops/setupLocalCouchDB.sh; \
 	fi
 
 

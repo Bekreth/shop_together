@@ -2,7 +2,7 @@
 PORT=5984
 ADDRESS=http://admin:password@localhost:$PORT
 ORG=org.couchdb.user
-USER=shop_together
+USER=billy
 LIST=group_lists
 
 echo
@@ -37,13 +37,6 @@ curl $ADDRESS/_users/$ORG:$USER \
 echo
 echo "Creating shopping list database";
 curl $ADDRESS/$LIST -X PUT;
-
-echo
-echo "Creating shopping list views";
-curl $ADDRESS/$LIST/_design/list_views.json \
-    -X PUT \
-    -H "Content-Type: application/json" \
-    -T group_lists/_design/list_views.json;
 
 echo
 echo "Assigning users to databases";
