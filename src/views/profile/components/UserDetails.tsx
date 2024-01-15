@@ -15,7 +15,7 @@ import Select from "@mui/material/Select"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 
-import { UserDatabase, initUser, Server, Connection } from "database/user"
+import { UserDatabase, initUser, Connection } from "database/user"
 import { UserContext } from "Context"
 import GridConnectionInfo from "components/GridConnectionInfo"
 

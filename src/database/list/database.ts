@@ -1,6 +1,9 @@
 import PouchDB from "pouchdb"
 
-import { Server } from "../user"
+import { 
+	connectionToString,
+	Server,
+} from "../user"
 
 import { ListData } from "./types"
 import { 
@@ -19,8 +22,6 @@ import {
 	View,
 } from "./design_docs"
 
-//TODO: Get this secured
-const scheme = "http"
 const cleanup_timer = 60_000
 
 export class ListStorage {
@@ -40,7 +41,7 @@ export class ListStorage {
 		this.shoppingListResolver = buildShoppingResolver(this.db)
 
 		if (server !== undefined) {
-			const remote = `${scheme}://${server.address}:${server.port}/${databaseName}`
+			const remote = `${connectionToString(server)}/${databaseName}`
 			console.log(`Connecting to ${remote}`)
 			const remoteDB = new PouchDB(remote, {
 				skip_setup: true,

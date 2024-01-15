@@ -10,10 +10,7 @@ import Grid from "@mui/material/Grid"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 import Radio from "@mui/material/Radio"
-import RadioGroup from "@mui/material/RadioGroup"
 import FormControlLabel from "@mui/material/FormControlLabel"
-import FormControl from "@mui/material/FormControl"
-import FormLabel from "@mui/material/FormLabel"
 
 import { Editable } from "types"
 import { Server } from "database/user"
@@ -27,14 +24,6 @@ export interface ServerDetailsProps extends Server {
 export default function ServerDetails(props: ServerDetailsProps) {
 	const {
 		_id,
-		_rev,
-		type,
-		serverName,
-		scheme,
-		address,
-		password,
-		username,
-		port,
 		deleteServer,
 		confirmEditServer,
 	} = props

@@ -3,7 +3,6 @@ import { useState } from "react"
 import { useNavigate } from "react-router"
 
 import AddIcon from "@mui/icons-material/Add"
-import SettingsIcon from "@mui/icons-material/Settings"
 
 import ListItem from "@mui/material/ListItem"
 import ListItemIcon from "@mui/material/ListItemIcon"
