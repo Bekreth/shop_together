@@ -53,7 +53,7 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 			_rev: database._rev,
 			type: database.type,
 			serverID: database.serverID,
-			databaseName: databaseName,
+			databaseName: database.databaseName,
 		}
 		confirmEditDatabase(updateDatabase)
 		setDatabase({
