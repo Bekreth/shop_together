@@ -41,8 +41,18 @@ export default function ServerDetails(props: ServerDetailsProps) {
 	}
 
 	const confirmEditing = () => {
-		const {editing, ...serverData} = server
-		confirmEditServer(serverData)
+		const updateServer = {
+			_id: server._id,
+			_rev: server._rev,
+			type: server.type,
+			serverName: server.serverName,
+			scheme: server.scheme,
+			address: server.address,
+			password: server.password,
+			username: server.username,
+			port: server.port
+		}
+		confirmEditServer(updateServer)
 		setServer({
 			...server,
 			editing: false

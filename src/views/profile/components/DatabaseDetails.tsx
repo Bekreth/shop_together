@@ -36,12 +36,8 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 	} = props
 
 	const [database, setDatabase] = useState<Database & Editable>({
-		_id: _id,
-		_rev: _rev,
-		type: type,
+		...props,
 		editing: false,
-		databaseName: databaseName,
-		serverID: serverID,
 	}) 
 
 	const editDatabase = () => {
@@ -52,8 +48,15 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 	}
 
 	const confirmEditing = () => {
-		const {editing, ...databaseData} = database
-		confirmEditDatabase(databaseData)
+		const updateDatabase = {
+			_id: database._id,
+			_rev: database._rev,
+			type: database.type,
+			serverID: database.serverID,
+			databaseName: databaseName,
+		}
+		console.log(updateDatabase)
+		confirmEditDatabase(updateDatabase)
 		setDatabase({
 			...database,
 			editing: false,
