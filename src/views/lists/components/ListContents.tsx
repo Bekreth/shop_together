@@ -196,8 +196,8 @@ const unpurchasedItems = (input: {
 				.sort((item1, item2) => (
 					item1.name.localeCompare(item2.name)
 				))
-				.map(item => (
-					<ListItem key={item.name}>
+				.map((item, index) => (
+					<ListItem divider={index % 5 == 4} key={item.name}>
 						<ListItemText>
 							{item.name}
 						</ListItemText>
@@ -250,8 +250,11 @@ const purchasedItems = (input: {
 				.filter((item) => (
 					item.state === PurchaseState.PURCHASED
 				))
-				.map(item => (
-					<ListItem key={item.name}>
+				.sort((item1, item2) => (
+					item1.name.localeCompare(item2.name)
+				))
+				.map((item, index) => (
+					<ListItem divider={index % 5 == 4} key={item.name}>
 						<ListItemText>
 							{item.name}
 						</ListItemText>

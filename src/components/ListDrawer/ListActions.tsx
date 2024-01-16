@@ -12,7 +12,8 @@ import CreateList from "./CreateList"
 
 const createList = "Create List"
 
-export default function ListActions() {
+export default function ListActions(props: {closeDrawer: () => void}) {
+	const {closeDrawer} = props
 	const navigate = useNavigate()
 
 	const [isCreatingList, setCreatingList] = useState(false)
@@ -35,7 +36,10 @@ export default function ListActions() {
 			</ListItem>
 			<CreateList
 				isOpen={isCreatingList}
-				close={() => setCreatingList(false)}
+				close={() => {
+					setCreatingList(false)
+					closeDrawer()
+				}}
 				navigate={navigateToList}
 			/>
 		</>

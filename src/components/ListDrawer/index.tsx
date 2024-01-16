@@ -68,7 +68,7 @@ export default function ListDrawer(props: ListDrawerProps) {
 			<List>
 				{renderedDatabaseList}
 				<Divider/>
-				<ListActions/>
+				<ListActions closeDrawer={closeDrawer}/>
 			</List>
 		</Drawer>
 	)
