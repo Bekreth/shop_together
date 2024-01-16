@@ -55,7 +55,6 @@ export default function DatabaseDetails(props: DatabaseDetailsProps) {
 			serverID: database.serverID,
 			databaseName: databaseName,
 		}
-		console.log(updateDatabase)
 		confirmEditDatabase(updateDatabase)
 		setDatabase({
 			...database,
